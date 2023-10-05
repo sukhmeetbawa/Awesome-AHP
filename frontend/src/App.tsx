@@ -125,16 +125,7 @@ function App(): JSX.Element {
                 )}
             </div>
             <button onClick={calculateWeights}>Calculate Weights</button>
-            <BarGraph
-                data={result?.alternativeWeights || []}
-                labels={alternatives}
-                label="Alternatives"
-            />{" "}
-            <BarGraph
-                data={result?.criterionWeights || []}
-                labels={criteria}
-                label="Criteria"
-            />
+
             {result && result.error && <p>Error: {result.error}</p>}
             {result && !result.error && (
                 <div>
@@ -145,6 +136,16 @@ function App(): JSX.Element {
                         Alternative Weights:{" "}
                         {result.alternativeWeights.join(", ")}
                     </p>
+                    <BarGraph
+                        data={result?.alternativeWeights || []}
+                        labels={alternatives}
+                        label="Alternatives"
+                    />{" "}
+                    <BarGraph
+                        data={result?.criterionWeights || []}
+                        labels={criteria}
+                        label="Criteria"
+                    />
                 </div>
             )}
         </div>
