@@ -122,15 +122,23 @@ function App(): JSX.Element {
     return (
         <div className="container mt-5 mb-5">
             <div className="form-group">
-                <label htmlFor="criteriaInput">Enter the Criteria</label>
-                <input
-                    type="text"
-                    id="criteriaInput"
-                    className="form-control"
-                    placeholder="A, B, C"
-                    onChange={handleCriteriaChange}
-                    disabled={buttonPressed}
-                />
+                <h1
+                    style={{ fontWeight: "bolder", fontSize: "5rem" }}
+                    className="text-center"
+                >
+                    AHP Calculator
+                </h1>
+                <div className="flex" style={{ alignItems: "center" }}>
+                    <label htmlFor="criteriaInput">Enter the Criteria</label>
+                    <input
+                        type="text"
+                        id="criteriaInput"
+                        className="form-control"
+                        placeholder="A, B, C"
+                        onChange={handleCriteriaChange}
+                        disabled={buttonPressed}
+                    />
+                </div>
             </div>
             <div className="form-group mt-4">
                 <label htmlFor="alternativesInput">
@@ -222,6 +230,10 @@ function App(): JSX.Element {
                     <button
                         className="btn btn-primary my-4"
                         onClick={calculateWeights}
+                        disabled={
+                            criteriaMatrix.length === 0 ||
+                            alternativeMatrices.length === 0
+                        }
                     >
                         {loading ? (
                             <>
