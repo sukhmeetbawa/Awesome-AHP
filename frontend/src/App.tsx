@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import AlternativesMatrix from "./components/AlternativeMatrix";
 import CriteriaMatrix from "./components/CriteriaMatrix";
+import BarGraph from "./components/BarGraph";
 
 interface AHPResult {
     error: string | null;
@@ -103,7 +104,6 @@ function App(): JSX.Element {
                     onChange={handleAlternativeChange}
                 />
             </div>
-
             <div>
                 {criteria.length >= 3 && (
                     <CriteriaMatrix
@@ -113,7 +113,6 @@ function App(): JSX.Element {
                     />
                 )}
             </div>
-
             <div>
                 {alternatives.length >= 3 && (
                     <AlternativesMatrix
@@ -125,9 +124,17 @@ function App(): JSX.Element {
                     />
                 )}
             </div>
-
             <button onClick={calculateWeights}>Calculate Weights</button>
-
+            <BarGraph
+                data={result?.alternativeWeights || []}
+                labels={alternatives}
+                label="Alternatives"
+            />{" "}
+            <BarGraph
+                data={result?.criterionWeights || []}
+                labels={criteria}
+                label="Criteria"
+            />
             {result && result.error && <p>Error: {result.error}</p>}
             {result && !result.error && (
                 <div>
