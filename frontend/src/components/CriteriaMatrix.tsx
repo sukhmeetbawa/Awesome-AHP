@@ -55,6 +55,7 @@ const CriteriaMatrix: React.FC<Props> = ({
                     .slice(i + 1)
                     .map((item2, j) => (
                         <PairWiseComparison
+                            key={`${item1}-${item2}`}
                             item1={item1}
                             item2={item2}
                             onComparison={(value, selected) =>

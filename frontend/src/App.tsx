@@ -1,15 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import AlternativesMatrix from "./components/AlternativeMatrix";
 import CriteriaMatrix from "./components/CriteriaMatrix";
 import BarGraph from "./components/BarGraph";
 import Spinner from "react-bootstrap/Spinner";
-import Toast from "react-bootstrap/Toast";
-import ToastContainer from "react-bootstrap/ToastContainer";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 import "./App.css";
+import ErrorToast from "./components/ErrorToast";
 
 interface AHPResult {
     error: string | null;
@@ -26,7 +25,12 @@ function App(): JSX.Element {
     >([]);
     const [result, setResult] = useState<AHPResult | null>(null);
     const [loading, setLoading] = useState(false);
+    const [buttonPressed, setButtonPressed] = useState(false);
+
     const [showErrorToast, setShowErrorToast] = useState(false);
+
+    const criteriaAccordionRef = useRef<HTMLDivElement>(null);
+    const alternativesAccordionRef = useRef<HTMLDivElement>(null);
 
     const handleCriteriaChange = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -76,6 +80,10 @@ function App(): JSX.Element {
             return;
         }
 
+        // Close both accordion sections
+        criteriaAccordionRef.current?.classList.remove("show");
+        alternativesAccordionRef.current?.classList.remove("show");
+
         setLoading(true);
 
         try {
@@ -107,6 +115,10 @@ function App(): JSX.Element {
         }
     };
 
+    const handleButtonPress = () => {
+        setButtonPressed(true);
+    };
+
     return (
         <div className="container mt-5 mb-5">
             <div className="form-group">
@@ -117,6 +129,7 @@ function App(): JSX.Element {
                     className="form-control"
                     placeholder="A, B, C"
                     onChange={handleCriteriaChange}
+                    disabled={buttonPressed}
                 />
             </div>
             <div className="form-group mt-4">
@@ -129,145 +142,125 @@ function App(): JSX.Element {
                     className="form-control"
                     placeholder="X, Y, Z"
                     onChange={handleAlternativeChange}
+                    disabled={buttonPressed}
                 />
             </div>
-
-            <div className="accordion my-5" id="accordionExample">
-                <div className="accordion-item">
-                    <h2 className="accordion-header">
-                        <button
-                            className="accordion-button"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapseOne"
-                            aria-expanded="true"
-                            aria-controls="collapseOne"
-                        >
-                            Criteria Values
-                        </button>
-                    </h2>
-                    <div
-                        id="collapseOne"
-                        className="accordion-collapse collapse show"
-                        data-bs-parent="#accordionExample"
-                    >
-                        <div className="accordion-body">
-                            {criteria.length >= 3 && (
-                                <CriteriaMatrix
-                                    n={criteria.length}
-                                    criterias={criteria}
-                                    updateMatrix={updateCriteriaMatrix}
-                                />
-                            )}
-                        </div>
-                    </div>
-                </div>
-                <div className="accordion-item">
-                    <h2 className="accordion-header">
-                        <button
-                            className="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapseTwo"
-                            aria-expanded="false"
-                            aria-controls="collapseTwo"
-                        >
-                            Alternative Values
-                        </button>
-                    </h2>
-                    <div
-                        id="collapseTwo"
-                        className="accordion-collapse collapse"
-                        data-bs-parent="#accordionExample"
-                    >
-                        <div className="accordion-body">
-                            {alternatives.length >= 3 && (
-                                <AlternativesMatrix
-                                    criterias={criteria}
-                                    n={criteria.length}
-                                    alternatives={alternatives}
-                                    m={alternatives.length}
-                                    updateMatrix={updateAlternativeMatrix}
-                                />
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* <div>
-                {criteria.length >= 3 && (
-                    <CriteriaMatrix
-                        n={criteria.length}
-                        criterias={criteria}
-                        updateMatrix={updateCriteriaMatrix}
-                    />
-                )}
-            </div> */}
-            {/* <div>
-                {alternatives.length >= 3 && (
-                    <AlternativesMatrix
-                        criterias={criteria}
-                        n={criteria.length}
-                        alternatives={alternatives}
-                        m={alternatives.length}
-                        updateMatrix={updateAlternativeMatrix}
-                    />
-                )}
-            </div> */}
-            <button className="btn btn-primary my-4" onClick={calculateWeights}>
-                {loading ? (
-                    <>
-                        <Spinner
-                            as="span"
-                            animation="border"
-                            size="sm"
-                            role="status"
-                            aria-hidden="true"
-                        />{" "}
-                        Calculating...
-                    </>
-                ) : (
-                    "Calculate Weights"
-                )}
+            <button
+                className="btn btn-success mt-3"
+                onClick={handleButtonPress}
+            >
+                Generate Matrices
             </button>
+            {buttonPressed && (
+                <>
+                    <div className="accordion my-5" id="accordionExample">
+                        <div className="accordion-item">
+                            <h2 className="accordion-header">
+                                <button
+                                    className="accordion-button"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne"
+                                    aria-expanded={false}
+                                    aria-controls="collapseOne"
+                                >
+                                    Criteria Values
+                                </button>
+                            </h2>
+                            <div
+                                ref={criteriaAccordionRef}
+                                id="collapseOne"
+                                className="accordion-collapse collapse show"
+                                data-bs-parent="#accordionExample"
+                            >
+                                <div className="accordion-body">
+                                    {criteria.length >= 3 && (
+                                        <CriteriaMatrix
+                                            n={criteria.length}
+                                            criterias={criteria}
+                                            updateMatrix={updateCriteriaMatrix}
+                                        />
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="accordion-item">
+                            <h2 className="accordion-header">
+                                <button
+                                    className="accordion-button collapsed"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#collapseTwo"
+                                    aria-expanded={false}
+                                    aria-controls="collapseTwo"
+                                >
+                                    Alternative Values
+                                </button>
+                            </h2>
+                            <div
+                                ref={alternativesAccordionRef}
+                                id="collapseTwo"
+                                className="accordion-collapse collapse"
+                                data-bs-parent="#accordionExample"
+                            >
+                                <div className="accordion-body">
+                                    {alternatives.length >= 3 && (
+                                        <AlternativesMatrix
+                                            criterias={criteria}
+                                            n={criteria.length}
+                                            alternatives={alternatives}
+                                            m={alternatives.length}
+                                            updateMatrix={
+                                                updateAlternativeMatrix
+                                            }
+                                        />
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button
+                        className="btn btn-primary my-4"
+                        onClick={calculateWeights}
+                    >
+                        {loading ? (
+                            <>
+                                <Spinner
+                                    as="span"
+                                    animation="border"
+                                    size="sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                />{" "}
+                                Calculating...
+                            </>
+                        ) : (
+                            "Calculate"
+                        )}
+                    </button>
 
-            {result && !result.error && (
-                <div>
-                    <BarGraph
-                        data={result?.alternativeWeights || []}
-                        labels={alternatives}
-                        label="Alternatives"
-                    />{" "}
-                    <BarGraph
-                        data={result?.criterionWeights || []}
-                        labels={criteria}
-                        label="Criteria"
-                    />
-                </div>
+                    {result && !result.error && (
+                        <div>
+                            <BarGraph
+                                data={result?.alternativeWeights || []}
+                                labels={alternatives}
+                                label="Alternatives"
+                            />{" "}
+                            <BarGraph
+                                data={result?.criterionWeights || []}
+                                labels={criteria}
+                                label="Criteria"
+                            />
+                        </div>
+                    )}
+                </>
             )}
 
-            {/* Error Toast */}
-            <ToastContainer position="top-end" className="p-3">
-                <Toast
-                    onClose={() => setShowErrorToast(false)}
-                    show={showErrorToast}
-                    delay={5000}
-                    autohide
-                    bg="warning"
-                >
-                    <Toast.Header>
-                        <strong className="me-auto">Error</strong>
-                    </Toast.Header>
-                    {result?.error ? (
-                        <Toast.Body>{result?.error}</Toast.Body>
-                    ) : (
-                        <Toast.Body>
-                            Something went wrong. Please try again.
-                        </Toast.Body>
-                    )}
-                </Toast>
-            </ToastContainer>
+            <ErrorToast
+                show={showErrorToast}
+                onClose={() => setShowErrorToast(false)}
+                error={result?.error ?? null}
+            />
         </div>
     );
 }
