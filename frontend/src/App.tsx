@@ -3,8 +3,13 @@ import axios from "axios";
 import AlternativesMatrix from "./components/AlternativeMatrix";
 import CriteriaMatrix from "./components/CriteriaMatrix";
 import BarGraph from "./components/BarGraph";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import Spinner from "react-bootstrap/Spinner";
+import Toast from "react-bootstrap/Toast";
+import ToastContainer from "react-bootstrap/ToastContainer";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+
+import "./App.css";
 
 interface AHPResult {
     error: string | null;
@@ -20,6 +25,8 @@ function App(): JSX.Element {
         number[][][]
     >([]);
     const [result, setResult] = useState<AHPResult | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [showErrorToast, setShowErrorToast] = useState(false);
 
     const handleCriteriaChange = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -29,7 +36,7 @@ function App(): JSX.Element {
             setCriteria([]);
             return;
         }
-        const criteriaArray = trimmedValue.split(",").filter(Boolean); // Filter out empty strings
+        const criteriaArray = trimmedValue.split(",").filter(Boolean);
 
         setCriteria(criteriaArray);
     };
@@ -42,7 +49,7 @@ function App(): JSX.Element {
             setAlternatives([]);
             return;
         }
-        const alternativeArray = trimmedValue.split(",").filter(Boolean); // Filter out empty strings
+        const alternativeArray = trimmedValue.split(",").filter(Boolean);
 
         setAlternatives(alternativeArray);
     };
@@ -55,13 +62,21 @@ function App(): JSX.Element {
         setAlternativeMatrices(newMatrix);
     };
 
+    const showToast = () => {
+        setShowErrorToast(true);
+        setTimeout(() => setShowErrorToast(false), 5000); // Hide the toast after 5 seconds
+    };
+
     const calculateWeights = async () => {
         if (criteria.length < 3 || alternatives.length < 3) {
             console.error(
                 "Please enter at least 3 criteria and 3 alternatives."
             );
+            showToast(); // Show error toast
             return;
         }
+
+        setLoading(true);
 
         try {
             const response = await axios.post<AHPResult>(
@@ -80,11 +95,15 @@ function App(): JSX.Element {
                     criterionWeights: [],
                     alternativeWeights: [],
                 });
+                showToast(); // Show error toast
             } else {
                 setResult(response.data);
             }
         } catch (error) {
             console.error("Error calculating weights:", error);
+            showToast(); // Show error toast
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -101,7 +120,9 @@ function App(): JSX.Element {
                 />
             </div>
             <div className="form-group mt-4">
-                <label htmlFor="alternativesInput">Enter the Alternatives</label>
+                <label htmlFor="alternativesInput">
+                    Enter the Alternatives
+                </label>
                 <input
                     type="text"
                     id="alternativesInput"
@@ -114,11 +135,22 @@ function App(): JSX.Element {
             <div className="accordion my-5" id="accordionExample">
                 <div className="accordion-item">
                     <h2 className="accordion-header">
-                        <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <button
+                            className="accordion-button"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne"
+                            aria-expanded="true"
+                            aria-controls="collapseOne"
+                        >
                             Criteria Values
                         </button>
                     </h2>
-                    <div id="collapseOne" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                    <div
+                        id="collapseOne"
+                        className="accordion-collapse collapse show"
+                        data-bs-parent="#accordionExample"
+                    >
                         <div className="accordion-body">
                             {criteria.length >= 3 && (
                                 <CriteriaMatrix
@@ -132,11 +164,22 @@ function App(): JSX.Element {
                 </div>
                 <div className="accordion-item">
                     <h2 className="accordion-header">
-                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <button
+                            className="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo"
+                            aria-expanded="false"
+                            aria-controls="collapseTwo"
+                        >
                             Alternative Values
                         </button>
                     </h2>
-                    <div id="collapseTwo" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div
+                        id="collapseTwo"
+                        className="accordion-collapse collapse"
+                        data-bs-parent="#accordionExample"
+                    >
                         <div className="accordion-body">
                             {alternatives.length >= 3 && (
                                 <AlternativesMatrix
@@ -172,18 +215,25 @@ function App(): JSX.Element {
                     />
                 )}
             </div> */}
-            <button className="btn btn-primary my-4" onClick={calculateWeights}>Calculate Weights</button>
+            <button className="btn btn-primary my-4" onClick={calculateWeights}>
+                {loading ? (
+                    <>
+                        <Spinner
+                            as="span"
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                        />{" "}
+                        Calculating...
+                    </>
+                ) : (
+                    "Calculate Weights"
+                )}
+            </button>
 
-            {result && result.error && <p>Error: {result.error}</p>}
             {result && !result.error && (
                 <div>
-                    <p>
-                        Criterion Weights: {result.criterionWeights.join(", ")}
-                    </p>
-                    <p>
-                        Alternative Weights:{" "}
-                        {result.alternativeWeights.join(", ")}
-                    </p>
                     <BarGraph
                         data={result?.alternativeWeights || []}
                         labels={alternatives}
@@ -196,6 +246,28 @@ function App(): JSX.Element {
                     />
                 </div>
             )}
+
+            {/* Error Toast */}
+            <ToastContainer position="top-end" className="p-3">
+                <Toast
+                    onClose={() => setShowErrorToast(false)}
+                    show={showErrorToast}
+                    delay={5000}
+                    autohide
+                    bg="warning"
+                >
+                    <Toast.Header>
+                        <strong className="me-auto">Error</strong>
+                    </Toast.Header>
+                    {result?.error ? (
+                        <Toast.Body>{result?.error}</Toast.Body>
+                    ) : (
+                        <Toast.Body>
+                            Something went wrong. Please try again.
+                        </Toast.Body>
+                    )}
+                </Toast>
+            </ToastContainer>
         </div>
     );
 }
