@@ -60,15 +60,6 @@ def calculate_ahp(A, B, n, m, criterions, alternatives):
 
     return W2.real.tolist(), W.real.tolist(), None
 
-@app.route('/calculate_criterion_weights', methods=['POST'])
-def calculate_criterion_weights():
-    criteria_matrix = None
-    if request.json is not None:
-        criteria_matrix = np.array(request.json.get('criteriaMatrix'))
-    if criteria_matrix is None:
-        return jsonify({'error': 'Invalid input'})
-    result, error_message = get_weight(criteria_matrix, "Criterion Table")
-    return jsonify({'criterionWeights': result, 'error': error_message})
 
 @app.route('/calculate_alternative_weights', methods=['POST'])
 def calculate_alternative_weights():
