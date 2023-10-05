@@ -33,7 +33,7 @@ const PairWiseComparison: React.FC<Props> = ({
                 <h4>{`${item1} comparison with ${item2}`}</h4>
                 <p>Select the higher priority criterion</p>
                 <label>
-                    <input
+                    <input className="form-check-input"
                         type="radio"
                         value={item1}
                         checked={higher === item1}
@@ -41,8 +41,8 @@ const PairWiseComparison: React.FC<Props> = ({
                     />
                     {item1}
                 </label>
-                <label>
-                    <input
+                <label className="px-4">
+                    <input className="form-check-input"
                         type="radio"
                         value={item2}
                         checked={higher === item2}
@@ -54,7 +54,7 @@ const PairWiseComparison: React.FC<Props> = ({
             <p>
                 How much higher is {higher} in comparison with {lower}?
             </p>
-            <input
+            <input className="form-range"
                 type="range"
                 min={1}
                 max={9}

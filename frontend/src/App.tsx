@@ -3,6 +3,8 @@ import axios from "axios";
 import AlternativesMatrix from "./components/AlternativeMatrix";
 import CriteriaMatrix from "./components/CriteriaMatrix";
 import BarGraph from "./components/BarGraph";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 interface AHPResult {
     error: string | null;
@@ -87,24 +89,70 @@ function App(): JSX.Element {
     };
 
     return (
-        <div>
-            <div>
-                <label>Enter the Criteria:</label>
+        <div className="container mt-5 mb-5">
+            <div className="form-group">
+                <label htmlFor="criteriaInput">Enter the Criteria</label>
                 <input
                     type="text"
+                    id="criteriaInput"
+                    className="form-control"
                     placeholder="A, B, C"
                     onChange={handleCriteriaChange}
                 />
             </div>
-            <div>
-                <label>Enter the Alternatives:</label>
+            <div className="form-group mt-4">
+                <label htmlFor="alternativesInput">Enter the Alternatives</label>
                 <input
                     type="text"
+                    id="alternativesInput"
+                    className="form-control"
                     placeholder="X, Y, Z"
                     onChange={handleAlternativeChange}
                 />
             </div>
-            <div>
+
+            <div className="accordion my-5" id="accordionExample">
+                <div className="accordion-item">
+                    <h2 className="accordion-header">
+                        <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Criteria Values
+                        </button>
+                    </h2>
+                    <div id="collapseOne" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                        <div className="accordion-body">
+                            {criteria.length >= 3 && (
+                                <CriteriaMatrix
+                                    n={criteria.length}
+                                    criterias={criteria}
+                                    updateMatrix={updateCriteriaMatrix}
+                                />
+                            )}
+                        </div>
+                    </div>
+                </div>
+                <div className="accordion-item">
+                    <h2 className="accordion-header">
+                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Alternative Values
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div className="accordion-body">
+                            {alternatives.length >= 3 && (
+                                <AlternativesMatrix
+                                    criterias={criteria}
+                                    n={criteria.length}
+                                    alternatives={alternatives}
+                                    m={alternatives.length}
+                                    updateMatrix={updateAlternativeMatrix}
+                                />
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* <div>
                 {criteria.length >= 3 && (
                     <CriteriaMatrix
                         n={criteria.length}
@@ -112,8 +160,8 @@ function App(): JSX.Element {
                         updateMatrix={updateCriteriaMatrix}
                     />
                 )}
-            </div>
-            <div>
+            </div> */}
+            {/* <div>
                 {alternatives.length >= 3 && (
                     <AlternativesMatrix
                         criterias={criteria}
@@ -123,8 +171,8 @@ function App(): JSX.Element {
                         updateMatrix={updateAlternativeMatrix}
                     />
                 )}
-            </div>
-            <button onClick={calculateWeights}>Calculate Weights</button>
+            </div> */}
+            <button className="btn btn-primary my-4" onClick={calculateWeights}>Calculate Weights</button>
 
             {result && result.error && <p>Error: {result.error}</p>}
             {result && !result.error && (
