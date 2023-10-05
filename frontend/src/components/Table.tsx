@@ -1,23 +1,39 @@
 import React from "react";
+import { Table as BootstrapTable } from "react-bootstrap";
 
 interface TableProps {
-    data: string[][];
+    data: number[][];
 }
 
-const Table: React.FC<TableProps> = ({ data }) => {
+const StyledTable: React.FC<TableProps> = ({ data }) => {
+    const tableStyle: React.CSSProperties = {
+        width: "50%", // Set width to 50% of screen width
+        margin: "auto", // Center the table
+    };
+
     return (
-        <table>
+        <BootstrapTable
+            bordered
+            hover
+            size="sm"
+            style={tableStyle}
+            className="text-center"
+        >
             <tbody>
                 {data.map((row, rowIndex) => (
                     <tr key={rowIndex}>
                         {row.map((cell, cellIndex) => (
-                            <td key={cellIndex}>{cell}</td>
+                            <td key={cellIndex} className="align-middle">
+                                {typeof cell === "number"
+                                    ? cell.toFixed(2)
+                                    : cell}
+                            </td>
                         ))}
                     </tr>
                 ))}
             </tbody>
-        </table>
+        </BootstrapTable>
     );
 };
 
-export default Table;
+export default StyledTable;
