@@ -1,61 +1,83 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import AlternativesMatrix from "./components/AlternativeMatrix";
+import CriteriaMatrix from "./components/CriteriaMatrix";
 
 interface AHPResult {
+    error: string | null;
     criterionWeights: number[];
     alternativeWeights: number[];
-    error?: string; // Assuming the server returns an error message
 }
 
 function App(): JSX.Element {
+    const [criteria, setCriteria] = useState<string[]>([]);
+    const [criteriaMatrix, setCriteriaMatrix] = useState<number[][]>([]);
+    const [alternatives, setAlternatives] = useState<string[]>([]);
+    const [alternativeMatrices, setAlternativeMatrices] = useState<
+        number[][][]
+    >([]);
     const [result, setResult] = useState<AHPResult | null>(null);
 
+    const handleCriteriaChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const trimmedValue = event.target.value.trim();
+        if (trimmedValue === "") {
+            setCriteria([]);
+            return;
+        }
+        const criteriaArray = trimmedValue.split(",").filter(Boolean); // Filter out empty strings
+
+        setCriteria(criteriaArray);
+    };
+
+    const handleAlternativeChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const trimmedValue = event.target.value.trim();
+        if (trimmedValue === "") {
+            setAlternatives([]);
+            return;
+        }
+        const alternativeArray = trimmedValue.split(",").filter(Boolean); // Filter out empty strings
+
+        setAlternatives(alternativeArray);
+    };
+
+    const updateCriteriaMatrix = (newMatrix: number[][]) => {
+        setCriteriaMatrix(newMatrix);
+    };
+
+    const updateAlternativeMatrix = (newMatrix: number[][][]) => {
+        setAlternativeMatrices(newMatrix);
+    };
+
     const calculateWeights = async () => {
-        const criterions: string[] = ["A", "B", "C"];
-        const alternatives: string[] = ["X", "Y", "Z"];
-        const alternativeMatrix: number[][][] = [
-            [
-                [1, 1, 1],
-                [1, 1, 1],
-                [1, 1, 1],
-            ],
-            [
-                [1, 1, 1],
-                [1, 1, 1],
-                [1, 1, 1],
-            ],
-            [
-                [1, 1, 1],
-                [1, 1, 1],
-                [1, 1, 1],
-            ],
-        ];
-        const criterionMatrix: number[][] = [
-            [1, 3, 5],
-            [1 / 3, 1, 2],
-            [1 / 5, 1 / 2, 1],
-        ];
+        if (criteria.length < 3 || alternatives.length < 3) {
+            console.error(
+                "Please enter at least 3 criteria and 3 alternatives."
+            );
+            return;
+        }
 
         try {
             const response = await axios.post<AHPResult>(
                 "http://localhost:5000/calculate_alternative_weights",
                 {
-                    criteriaMatrix: criterionMatrix,
-                    alternativeMatrix: alternativeMatrix,
-                    criterions: criterions,
+                    criteriaMatrix: criteriaMatrix,
+                    alternativeMatrix: alternativeMatrices,
+                    criterions: criteria,
                     alternatives: alternatives,
                 }
             );
 
             if (response.data.error) {
-                // Display error message if consistency check fails
                 setResult({
                     error: response.data.error,
                     criterionWeights: [],
                     alternativeWeights: [],
                 });
             } else {
-                // Set result if no error
                 setResult(response.data);
             }
         } catch (error) {
@@ -65,7 +87,47 @@ function App(): JSX.Element {
 
     return (
         <div>
+            <div>
+                <label>Enter the Criteria:</label>
+                <input
+                    type="text"
+                    placeholder="A, B, C"
+                    onChange={handleCriteriaChange}
+                />
+            </div>
+            <div>
+                <label>Enter the Alternatives:</label>
+                <input
+                    type="text"
+                    placeholder="X, Y, Z"
+                    onChange={handleAlternativeChange}
+                />
+            </div>
+
+            <div>
+                {criteria.length >= 3 && (
+                    <CriteriaMatrix
+                        n={criteria.length}
+                        criterias={criteria}
+                        updateMatrix={updateCriteriaMatrix}
+                    />
+                )}
+            </div>
+
+            <div>
+                {alternatives.length >= 3 && (
+                    <AlternativesMatrix
+                        criterias={criteria}
+                        n={criteria.length}
+                        alternatives={alternatives}
+                        m={alternatives.length}
+                        updateMatrix={updateAlternativeMatrix}
+                    />
+                )}
+            </div>
+
             <button onClick={calculateWeights}>Calculate Weights</button>
+
             {result && result.error && <p>Error: {result.error}</p>}
             {result && !result.error && (
                 <div>
