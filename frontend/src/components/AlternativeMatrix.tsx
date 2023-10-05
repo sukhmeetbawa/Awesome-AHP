@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PairWiseComparison from "./PairwiseComparison";
+import Table from "./Table";
 
 interface Props {
     n: number;
@@ -69,11 +70,11 @@ const AlternativesMatrix: React.FC<Props> = ({
                                 />
                             ))
                     )}
+                    <div key={`table-${criteria}`}>
+                        <Table data={matrix[k]} />
+                    </div>
                 </div>
             ))}
-            <div>
-                <pre>{JSON.stringify(matrix, null, 2)}</pre>
-            </div>
         </div>
     );
 };
