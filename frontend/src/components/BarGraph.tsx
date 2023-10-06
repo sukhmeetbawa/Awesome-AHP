@@ -50,7 +50,16 @@ const BarGraph: React.FC<BarGraphProps> = ({ data, labels, label }) => {
                     },
                     options: {
                         indexAxis: "y",
-                        responsive: true,
+                        responsive: true, // Make the chart responsive
+                        maintainAspectRatio: false, // Disable aspect ratio to allow resizing
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                            },
+                            y: {
+                                beginAtZero: true,
+                            },
+                        },
                     },
                 });
             }
@@ -71,7 +80,7 @@ const BarGraph: React.FC<BarGraphProps> = ({ data, labels, label }) => {
     return (
         <div
             className="chart-container"
-            style={{ position: "relative", height: "40vh", width: "80vw" }}
+            style={{ position: "relative", height: "100%", width: "100%" }} // Set height and width to 100% for responsiveness
         >
             <canvas ref={chartRef}></canvas>
         </div>

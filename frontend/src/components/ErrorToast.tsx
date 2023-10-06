@@ -11,7 +11,7 @@ interface ErrorToastProps {
 
 const ErrorToast: React.FC<ErrorToastProps> = ({ show, onClose, error }) => {
     return (
-        <ToastContainer position="top-end" className="p-3">
+        <ToastContainer position="bottom-center" className="p-3">
             <Toast
                 onClose={onClose}
                 show={show}
