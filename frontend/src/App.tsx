@@ -17,6 +17,8 @@ interface AHPResult {
 }
 
 function App(): JSX.Element {
+    const apiUrl = import.meta.env.VITE_API_URL;
+
     const [criteria, setCriteria] = useState<string[]>([]);
     const [criteriaMatrix, setCriteriaMatrix] = useState<number[][]>([]);
     const [alternatives, setAlternatives] = useState<string[]>([]);
@@ -88,7 +90,8 @@ function App(): JSX.Element {
 
         try {
             const response = await axios.post<AHPResult>(
-                "https://ahp-backend.onrender.com//calculate_alternative_weights",
+                (apiUrl || "http://localhost:5000") +
+                    "/calculate_alternative_weights",
                 {
                     criteriaMatrix: criteriaMatrix,
                     alternativeMatrix: alternativeMatrices,
@@ -120,14 +123,15 @@ function App(): JSX.Element {
     };
 
     return (
-        <div className="container mt-5 mb-5">
+        <div className="container mt-5 mb-5  col-sm-12">
             <div className="form-group">
                 <h1
-                    style={{ fontWeight: "bolder", fontSize: "5rem" }}
+                    style={{ fontWeight: "bolder", fontSize: "4em" }}
                     className="text-center"
                 >
                     AHP Calculator
                 </h1>
+
                 <div className="flex" style={{ alignItems: "center" }}>
                     <label htmlFor="criteriaInput">Enter the Criteria</label>
                     <input
@@ -153,15 +157,19 @@ function App(): JSX.Element {
                     disabled={buttonPressed}
                 />
             </div>
-            <button
-                className="btn btn-success mt-3"
-                onClick={handleButtonPress}
-            >
-                Generate Matrices
-            </button>
+            <br />
+            <div className="text-center">
+                <button
+                    className="btn btn-success mt-3"
+                    onClick={handleButtonPress}
+                    disabled={buttonPressed}
+                >
+                    Generate Matrices
+                </button>
+            </div>
             {buttonPressed && (
                 <>
-                    <div className="accordion my-5" id="accordionExample">
+                    <div className="accordion my-5" id="accordion">
                         <div className="accordion-item">
                             <h2 className="accordion-header">
                                 <button
@@ -227,32 +235,34 @@ function App(): JSX.Element {
                             </div>
                         </div>
                     </div>
-                    <button
-                        className="btn btn-primary my-4"
-                        onClick={calculateWeights}
-                        disabled={
-                            criteriaMatrix.length === 0 ||
-                            alternativeMatrices.length === 0
-                        }
-                    >
-                        {loading ? (
-                            <>
-                                <Spinner
-                                    as="span"
-                                    animation="border"
-                                    size="sm"
-                                    role="status"
-                                    aria-hidden="true"
-                                />{" "}
-                                Calculating...
-                            </>
-                        ) : (
-                            "Calculate"
-                        )}
-                    </button>
+                    <div className="text-center">
+                        <button
+                            className="btn btn-primary my-4"
+                            onClick={calculateWeights}
+                            disabled={
+                                criteriaMatrix.length === 0 ||
+                                alternativeMatrices.length === 0
+                            }
+                        >
+                            {loading ? (
+                                <>
+                                    <Spinner
+                                        as="span"
+                                        animation="border"
+                                        size="sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                    />{" "}
+                                    Calculating...
+                                </>
+                            ) : (
+                                "Calculate"
+                            )}
+                        </button>
+                    </div>
 
                     {result && !result.error && (
-                        <div>
+                        <div className="mx-auto">
                             <BarGraph
                                 data={result?.alternativeWeights || []}
                                 labels={alternatives}
