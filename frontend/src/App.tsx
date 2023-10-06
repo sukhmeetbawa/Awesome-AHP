@@ -88,7 +88,7 @@ function App(): JSX.Element {
 
         try {
             const response = await axios.post<AHPResult>(
-                "http://localhost:5000/calculate_alternative_weights",
+                "https://ahp-backend.onrender.com//calculate_alternative_weights",
                 {
                     criteriaMatrix: criteriaMatrix,
                     alternativeMatrix: alternativeMatrices,
