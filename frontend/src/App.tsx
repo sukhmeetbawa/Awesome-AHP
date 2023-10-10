@@ -1,11 +1,11 @@
-import React, { useState, useRef } from "react";
 import axios from "axios";
-import AlternativesMatrix from "./components/AlternativeMatrix";
-import CriteriaMatrix from "./components/CriteriaMatrix";
-import BarGraph from "./components/BarGraph";
-import Spinner from "react-bootstrap/Spinner";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import React, { useEffect, useRef, useState } from "react";
+import Spinner from "react-bootstrap/Spinner";
+import AlternativesMatrix from "./components/AlternativeMatrix";
+import BarGraph from "./components/BarGraph";
+import CriteriaMatrix from "./components/CriteriaMatrix";
 
 import "./App.css";
 import ErrorToast from "./components/ErrorToast";
@@ -35,7 +35,7 @@ function App(): JSX.Element {
     const alternativesAccordionRef = useRef<HTMLDivElement>(null);
 
     const handleCriteriaChange = (
-        event: React.ChangeEvent<HTMLInputElement>
+        event: React.ChangeEvent<HTMLInputElement>,
     ) => {
         const trimmedValue = event.target.value.trim();
         if (trimmedValue === "") {
@@ -48,7 +48,7 @@ function App(): JSX.Element {
     };
 
     const handleAlternativeChange = (
-        event: React.ChangeEvent<HTMLInputElement>
+        event: React.ChangeEvent<HTMLInputElement>,
     ) => {
         const trimmedValue = event.target.value.trim();
         if (trimmedValue === "") {
@@ -76,7 +76,7 @@ function App(): JSX.Element {
     const calculateWeights = async () => {
         if (criteria.length < 3 || alternatives.length < 3) {
             console.error(
-                "Please enter at least 3 criteria and 3 alternatives."
+                "Please enter at least 3 criteria and 3 alternatives.",
             );
             showToast(); // Show error toast
             return;
@@ -97,7 +97,7 @@ function App(): JSX.Element {
                     alternativeMatrix: alternativeMatrices,
                     criterions: criteria,
                     alternatives: alternatives,
-                }
+                },
             );
 
             if (response.data.error) {
@@ -121,6 +121,11 @@ function App(): JSX.Element {
     const handleButtonPress = () => {
         setButtonPressed(true);
     };
+
+    useEffect(() => {
+        console.log("Criteria:", criteriaMatrix);
+        console.log("Alternatives:", alternativeMatrices);
+    }, [criteriaMatrix, alternativeMatrices]);
 
     return (
         <div className="container mt-5 mb-5  col-sm-12">

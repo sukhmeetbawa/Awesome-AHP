@@ -19,8 +19,8 @@ const AlternativesMatrix: React.FC<Props> = ({
 }: Props) => {
     const [matrix, setMatrix] = useState(() =>
         Array.from(Array(n), () =>
-            Array.from(Array(m), () => new Array(m).fill(1))
-        )
+            Array.from(Array(m), () => new Array(m).fill(1)),
+        ),
     );
 
     const handleComparison = (
@@ -28,7 +28,7 @@ const AlternativesMatrix: React.FC<Props> = ({
         selected: string,
         k: number,
         i: number,
-        j: number
+        j: number,
     ) => {
         setMatrix((prevMatrix) => {
             const newMatrix = [...prevMatrix];
@@ -65,11 +65,11 @@ const AlternativesMatrix: React.FC<Props> = ({
                                             selected,
                                             k,
                                             i,
-                                            j + i + 1
+                                            j + i + 1,
                                         )
                                     }
                                 />
-                            ))
+                            )),
                     )}
                     <div key={`table-${criteria}`}>
                         <Table data={matrix[k]} />
