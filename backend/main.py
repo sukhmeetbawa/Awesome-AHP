@@ -2,6 +2,11 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import numpy as np
 import pandas as pd
+import openai
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -79,6 +84,36 @@ def calculate_alternative_weights():
 
     result_criterion_weights, result_alternative_weights, error_message = calculate_ahp(criteria_matrix, alternatives_matrix, len(criterions or []), len(alternatives or []), criterions or [], alternatives or [])
     return jsonify({'criterionWeights': result_criterion_weights, 'alternativeWeights': result_alternative_weights, 'error': error_message})
+
+
+@app.route('/open_ai_api', methods=['GET'])
+def open_ai_api():
+    api_key = os.environ['API']
+    openai.api_key = api_key
+
+    # # Your prompt
+    # prompt = """
+    #     What is incremental clustering ?
+    # """
+
+    prompt = request.args.get('prompt', default='', type=str)
+
+    # Call the ChatGPT API using the correct endpoint for chat models
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[
+            {"role": "system", "content": "You are working on an AHP algorithm."},
+            {"role": "user", "content": prompt},
+        ],
+    )
+
+    # Extract the generated response
+    output = response["choices"][0]["message"]["content"] # type: ignore
+
+    # Print the result
+    print(output)
+    return output
+
 
 if __name__ == '__main__':
     app.run(port=5000)
