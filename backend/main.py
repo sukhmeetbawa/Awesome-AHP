@@ -175,35 +175,38 @@ def calculate_alternative_weights():
     return jsonify({'criterionWeights': result_criterion_weights, 'alternativeWeights': result_alternative_weights, 'error': error_message})
 
 
-@app.route('/open_ai_api', methods=['GET'])
+@app.route('/open_ai_api', methods=['GET'])  # Change the method to POST # type: ignore
 def open_ai_api():
+    criterias = None
+    alternatives = None
+    usecase = None
+    api_key = None
+    
+    if request.json is not None:
+        data = request.json  # Extract JSON data from the request body
 
-    criterias = request.args.get('criterias', default='', type=str)
-    alternatives = request.args.get('alternatives', default='', type=str)
-    usecase = request.args.get('usecase', default='', type=str)
-    api_key = request.args.get('apikey', default='', type=str)
+        criterias = data.get('criterias', '')
+        alternatives = data.get('alternatives', '')
+        usecase = data.get('usecase', '')
+        api_key = data.get('apikey', '')
 
-    openai.api_key = api_key
+        openai.api_key = api_key
 
-    prompt = generatePrompt(criterias, alternatives, usecase)
+        prompt = generatePrompt(criterias, alternatives, usecase)
 
-    output = ""
-    # output += "API Endpoint \n\n\n" + prompt + "\n\n\n"
+        output = ""
+        
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are working on an AHP algorithm."},
+                {"role": "user", "content": prompt},
+            ],
+        )
 
-    # Call the ChatGPT API using the correct endpoint for chat models
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[
-            {"role": "system", "content": "You are working on an AHP algorithm."},
-            {"role": "user", "content": prompt},
-        ],
-    )
+        output += response["choices"][0]["message"]["content"] # type: ignore
 
-    # Extract the generated response
-    output += response["choices"][0]["message"]["content"] # type: ignore
-
-    # Print the result
-    return output
+        return output
 
 
 if __name__ == '__main__':
