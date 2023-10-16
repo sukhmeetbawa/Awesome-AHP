@@ -4,9 +4,6 @@ import numpy as np
 import pandas as pd
 import openai
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -180,12 +177,13 @@ def calculate_alternative_weights():
 
 @app.route('/open_ai_api', methods=['GET'])
 def open_ai_api():
-    api_key = os.environ['API']
-    openai.api_key = api_key
 
     criterias = request.args.get('criterias', default='', type=str)
     alternatives = request.args.get('alternatives', default='', type=str)
     usecase = request.args.get('usecase', default='', type=str)
+    api_key = request.args.get('apikey', default='', type=str)
+
+    openai.api_key = api_key
 
     prompt = generatePrompt(criterias, alternatives, usecase)
 
