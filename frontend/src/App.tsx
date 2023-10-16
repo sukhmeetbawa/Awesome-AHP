@@ -124,20 +124,23 @@ function App(): JSX.Element {
     };
 
     const handleButtonPress = async () => {
-        const prompt = await axios.get<string>(
-            apiUrl || "http://localhost:5000" + "/prompt",
-            {
-                params: {
+        try {
+            const response = await axios.post<string>(
+                apiUrl || "http://localhost:5000" + "/open_ai_api",
+                {
                     criterias: criteriaString,
                     alternatives: alternativeString,
                     usecase: usecase,
-                    api_key:
-                        "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",
+                    apikey: "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",
                 },
-            },
-        );
-        console.log(prompt);
-        setButtonPressed(true);
+            );
+
+            console.log(response);
+            setButtonPressed(true);
+        } catch (error) {
+            console.error("Error sending data:", error);
+            showToast(); // Show error toast
+        }
     };
 
     return (
