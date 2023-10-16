@@ -66,6 +66,98 @@ def calculate_ahp(A, B, n, m, criterions, alternatives):
     return W2.real.tolist(), W.real.tolist(), None
 
 
+def generatePrompt(criteria, alternatives, usecase):
+
+    criteria_list = criteria.split(',')
+    alternatives_list = alternatives.split(',')
+
+    print(criteria)
+    print(alternatives)
+    print(usecase)
+    print(criteria_list)
+    print(alternatives_list)
+
+    prompt = "I am working on an AHP algorithm, \n"
+    prompt += "i have use case of " + usecase + " \n" 
+    prompt += "consider " + criteria + " as therir criteria \n"
+    prompt += "consider " + alternatives + " as their alternatives \n\n"
+    prompt += "write down values for priority establishment state based on educated guess \n"
+    prompt += "values lies between value of 1 to 9 dont use decimal values for which priority is higher and use 1/value for which it has less priority \n here 1 is equal and 9 is has the most priority also tell me which value from two has higher priority \n\n"
+    prompt += "- pairwise comparision of the criterias (Compare each criterias) \n"
+    prompt += "create a criterian table with all " + str(len(criteria_list)) + " criteria comparision with each other \n"
+
+    it1 = 0
+    while it1 < len(criteria_list):
+        it2 = it1 + 1
+        while it2 < len(criteria_list):
+            prompt += "     -> Criterion " + criteria_list[it1] + " comparision with Criterion " + criteria_list[it2] + "\n"
+            it2 += 1
+        it1 += 1
+
+    prompt += "\n - pairwise comparision of the alternatives (Compare each alternatives) \n"
+    prompt += "create a alternative table for each criterion with all " + str(len(alternatives_list)) + " alternatives comparision with each other \n"
+    
+
+    it1 = 0
+    while it1 < len(criteria_list):
+        prompt += "     -> Alternative comparision for Criterion " + criteria_list[it1] +  " (compare all " + str(len(criteria_list)) + " alternatives with each other ) \n"
+        it1 += 1
+
+    prompt += "\n write in Table format \n"
+    prompt += "1 for the criteria and 1 for each alternative \n\n"
+    prompt += "at the end write the all the tables combined in aa json format for easy access of data \n"
+    prompt += "use the below given json format to generate answer \n\n"
+
+    prompt += "{\n"
+    prompt += "  \"criteria_comparison\": {\n"
+
+    it1 = 0
+    while it1 < len(criteria_list):
+        prompt += "\"" + criteria_list[it1] + "\" : ["
+        it2 = 0
+        while it2 < len(criteria_list):
+            prompt += "X"
+            if(it2+1 < len(criteria_list)): prompt += ","
+            it2 += 1
+        prompt += "]"
+        if(it1+1 < len(criteria_list)): prompt += ","
+        prompt += "\n"
+        it1 += 1
+    
+    prompt += "}, \n"
+    prompt += " \"alternative_comparison\": { \n"
+    
+    it = 0
+    while it < len(criteria_list):
+        prompt += "\"Criterion " + criteria_list[it] + "\": { \n"
+        
+        it1 = 0
+        while it1 < len(alternatives_list):
+            prompt += "\"" + alternatives_list[it1] + "\" : ["
+            it2 = 0
+            while it2 < len(alternatives_list):
+                prompt += "X"
+                if(it2+1 < len(alternatives_list)): prompt += ","
+                it2 += 1
+            prompt += "]"
+            if(it1+1 < len(alternatives_list)): prompt += ","
+            prompt += "\n"
+            it1 += 1
+
+        prompt += "}"
+        if(it+1 < len(criteria_list)): prompt += ","
+        prompt += "\n"
+        it += 1
+
+    prompt += "}\n"
+    prompt += "}\n"
+    prompt += "\n\n maintain consistancy check for the values under 10 % \n"
+    prompt += "i only want JSON output nothing more. Don't give me any text what so ever"
+
+
+    return prompt
+
+
 @app.route('/calculate_alternative_weights', methods=['POST'])
 def calculate_alternative_weights():
     criteria_matrix = None
@@ -91,12 +183,14 @@ def open_ai_api():
     api_key = os.environ['API']
     openai.api_key = api_key
 
-    # # Your prompt
-    # prompt = """
-    #     What is incremental clustering ?
-    # """
+    criterias = request.args.get('criterias', default='', type=str)
+    alternatives = request.args.get('alternatives', default='', type=str)
+    usecase = request.args.get('usecase', default='', type=str)
 
-    prompt = request.args.get('prompt', default='', type=str)
+    prompt = generatePrompt(criterias, alternatives, usecase)
+
+    output = ""
+    # output += "API Endpoint \n\n\n" + prompt + "\n\n\n"
 
     # Call the ChatGPT API using the correct endpoint for chat models
     response = openai.ChatCompletion.create(
@@ -108,10 +202,9 @@ def open_ai_api():
     )
 
     # Extract the generated response
-    output = response["choices"][0]["message"]["content"] # type: ignore
+    output += response["choices"][0]["message"]["content"] # type: ignore
 
     # Print the result
-    print(output)
     return output
 
 
