@@ -3,25 +3,19 @@ import PairWiseComparison from "./PairwiseComparison";
 import Table from "./Table";
 
 interface Props {
-    n: number;
-    m: number;
     criterias: string[];
     alternatives: string[];
     updateMatrix: (newMatrix: number[][][]) => void;
+    recieverMatrix: number[][][];
 }
 
 const AlternativesMatrix: React.FC<Props> = ({
-    n,
-    m,
     criterias,
     alternatives,
     updateMatrix,
+    recieverMatrix,
 }: Props) => {
-    const [matrix, setMatrix] = useState(() =>
-        Array.from(Array(n), () =>
-            Array.from(Array(m), () => new Array(m).fill(1)),
-        ),
-    );
+    const [matrix, setMatrix] = useState(() => recieverMatrix);
 
     const handleComparison = (
         value: number,
@@ -68,6 +62,7 @@ const AlternativesMatrix: React.FC<Props> = ({
                                             j + i + 1,
                                         )
                                     }
+                                    defaultPriority={matrix[k][i][j + i + 1]}
                                 />
                             )),
                     )}

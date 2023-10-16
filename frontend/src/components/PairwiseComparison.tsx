@@ -1,18 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface Props {
     item1: string;
     item2: string;
     onComparison: (value: number, selected: string) => void;
+    defaultPriority?: number;
 }
 
 const PairWiseComparison: React.FC<Props> = ({
     item1,
     item2,
     onComparison,
+    defaultPriority,
 }: Props) => {
     const [higher, setHigher] = useState<string>(item1);
     const [lower, setLower] = useState<string>(item2);
+
+    useEffect(() => {
+        // Update default values if defaultPriority is less than 1
+        if (defaultPriority && defaultPriority < 1) {
+            setHigher(item2);
+            setLower(item1);
+            setPriority(1 / defaultPriority);
+            onComparison(1 / defaultPriority, item2);
+        }
+    }, [defaultPriority]);
 
     const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setHigher(event.target.value);
@@ -20,7 +32,7 @@ const PairWiseComparison: React.FC<Props> = ({
         else setLower(item2);
     };
 
-    const [priority, setPriority] = useState<number>(1);
+    const [priority, setPriority] = useState<number>(defaultPriority || 1);
     const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = parseInt(event.target.value, 10);
         setPriority(value);

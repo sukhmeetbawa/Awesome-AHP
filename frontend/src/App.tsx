@@ -16,6 +16,37 @@ interface AHPResult {
     alternativeWeights: number[];
 }
 
+interface AHPData {
+    criteria_comparison: Record<string, number[]>;
+    alternative_comparison: Record<string, Record<string, number[]>>;
+}
+
+function parseAHPData(data: AHPData): {
+    criteriaMatrix: number[][];
+    alternativeMatrices: number[][][];
+} {
+    const criteriaMatrix: number[][] = [];
+    const alternativeMatrices: number[][][] = [];
+
+    // Parse criteria comparison
+    for (const key in data.criteria_comparison) {
+        criteriaMatrix.push(data.criteria_comparison[key]);
+    }
+
+    // Parse alternative comparison for each criterion
+    for (const criterion in data.alternative_comparison) {
+        const alternativeMatrix: number[][] = [];
+        for (const alternative in data.alternative_comparison[criterion]) {
+            alternativeMatrix.push(
+                data.alternative_comparison[criterion][alternative],
+            );
+        }
+        alternativeMatrices.push(alternativeMatrix);
+    }
+
+    return { criteriaMatrix, alternativeMatrices };
+}
+
 function App(): JSX.Element {
     const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -125,17 +156,42 @@ function App(): JSX.Element {
 
     const handleButtonPress = async () => {
         try {
-            const response = await axios.post<string>(
-                apiUrl || "http://localhost:5000" + "/open_ai_api",
-                {
-                    criterias: criteriaString,
-                    alternatives: alternativeString,
-                    usecase: usecase,
-                    apikey: "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",
+            // const response = await axios.post<string>(
+            //     apiUrl || "http://localhost:5000" + "/open_ai_api",
+            //     {
+            //         criterias: criteriaString,
+            //         alternatives: alternativeString,
+            //         usecase: usecase,
+            //         apikey: "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",
+            //     },
+            // );
+            const response = {
+                criteria_comparison: {
+                    Safety: [1, 3, 2],
+                    Comfort: [1 / 3, 1, 1 / 2],
+                    Speed: [1 / 2, 2, 1],
                 },
-            );
-
-            console.log(response);
+                alternative_comparison: {
+                    "Criterion Safety": {
+                        Mercedes: [1, 1 / 3, 1 / 2],
+                        BMW: [3, 1, 2],
+                        Audi: [2, 1 / 2, 1],
+                    },
+                    "Criterion Comfort": {
+                        Mercedes: [1, 1 / 3, 1 / 2],
+                        BMW: [3, 1, 2],
+                        Audi: [2, 1 / 2, 1],
+                    },
+                    "Criterion Speed": {
+                        Mercedes: [1, 1 / 2, 1],
+                        BMW: [2, 1, 3],
+                        Audi: [1 / 2, 1 / 3, 1],
+                    },
+                },
+            };
+            console.log(parseAHPData(response));
+            setCriteriaMatrix(parseAHPData(response).criteriaMatrix);
+            setAlternativeMatrices(parseAHPData(response).alternativeMatrices);
             setButtonPressed(true);
         } catch (error) {
             console.error("Error sending data:", error);
@@ -227,9 +283,9 @@ function App(): JSX.Element {
                                 <div className="accordion-body">
                                     {criteria.length >= 3 && (
                                         <CriteriaMatrix
-                                            n={criteria.length}
                                             criterias={criteria}
                                             updateMatrix={updateCriteriaMatrix}
+                                            recieverMatrix={criteriaMatrix}
                                         />
                                     )}
                                 </div>
@@ -258,12 +314,11 @@ function App(): JSX.Element {
                                     {alternatives.length >= 3 && (
                                         <AlternativesMatrix
                                             criterias={criteria}
-                                            n={criteria.length}
                                             alternatives={alternatives}
-                                            m={alternatives.length}
                                             updateMatrix={
                                                 updateAlternativeMatrix
                                             }
+                                            recieverMatrix={alternativeMatrices}
                                         />
                                     )}
                                 </div>
