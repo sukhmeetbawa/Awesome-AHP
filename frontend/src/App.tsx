@@ -1,7 +1,7 @@
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import AlternativesMatrix from "./components/AlternativeMatrix";
 import BarGraph from "./components/BarGraph";
@@ -20,11 +20,14 @@ function App(): JSX.Element {
     const apiUrl = import.meta.env.VITE_API_URL;
 
     const [criteria, setCriteria] = useState<string[]>([]);
+    const [criteriaString, setCriteriaString] = useState<string>("");
+    const [alternativeString, setAlternativeString] = useState<string>("");
     const [criteriaMatrix, setCriteriaMatrix] = useState<number[][]>([]);
     const [alternatives, setAlternatives] = useState<string[]>([]);
     const [alternativeMatrices, setAlternativeMatrices] = useState<
         number[][][]
     >([]);
+    const [usecase, setUsecase] = useState<string>("");
     const [result, setResult] = useState<AHPResult | null>(null);
     const [loading, setLoading] = useState(false);
     const [buttonPressed, setButtonPressed] = useState(false);
@@ -42,6 +45,7 @@ function App(): JSX.Element {
             setCriteria([]);
             return;
         }
+        setCriteriaString(trimmedValue);
         const criteriaArray = trimmedValue.split(",").filter(Boolean);
 
         setCriteria(criteriaArray);
@@ -55,6 +59,7 @@ function App(): JSX.Element {
             setAlternatives([]);
             return;
         }
+        setAlternativeString(trimmedValue);
         const alternativeArray = trimmedValue.split(",").filter(Boolean);
 
         setAlternatives(alternativeArray);
@@ -118,14 +123,22 @@ function App(): JSX.Element {
         }
     };
 
-    const handleButtonPress = () => {
+    const handleButtonPress = async () => {
+        const prompt = await axios.get<string>(
+            apiUrl || "http://localhost:5000" + "/prompt",
+            {
+                params: {
+                    criterias: criteriaString,
+                    alternatives: alternativeString,
+                    usecase: usecase,
+                    api_key:
+                        "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",
+                },
+            },
+        );
+        console.log(prompt);
         setButtonPressed(true);
     };
-
-    useEffect(() => {
-        console.log("Criteria:", criteriaMatrix);
-        console.log("Alternatives:", alternativeMatrices);
-    }, [criteriaMatrix, alternativeMatrices]);
 
     return (
         <div className="container mt-5 mb-5  col-sm-12">
@@ -143,7 +156,7 @@ function App(): JSX.Element {
                         type="text"
                         id="criteriaInput"
                         className="form-control"
-                        placeholder="A, B, C"
+                        placeholder="Safety, Comfort, Speed"
                         onChange={handleCriteriaChange}
                         disabled={buttonPressed}
                     />
@@ -157,8 +170,22 @@ function App(): JSX.Element {
                     type="text"
                     id="alternativesInput"
                     className="form-control"
-                    placeholder="X, Y, Z"
+                    placeholder="Mercedes, BMW, Audi"
                     onChange={handleAlternativeChange}
+                    disabled={buttonPressed}
+                />
+            </div>
+            <br />
+            <div>
+                <label htmlFor="promptInput">
+                    Enter the use case for the AHP
+                </label>
+                <input
+                    type="text"
+                    id="promptInput"
+                    className="form-control"
+                    placeholder="What is the best car?"
+                    onChange={(e) => setUsecase(e.target.value)}
                     disabled={buttonPressed}
                 />
             </div>
