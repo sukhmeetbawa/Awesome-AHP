@@ -1,5 +1,5 @@
 import NextIcon from "@mui/icons-material/NavigateNextRounded";
-import { Button, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import PairWiseComparison from "../../components/PairwiseComparison";
 import Table from "../../components/Table";
@@ -38,7 +38,7 @@ const CriteriaForm: React.FC<CriteriaFormProps> = ({
     };
 
     return (
-        <>
+        <Box margin={2}>
             <Typography variant="h1">Criteria Details</Typography>
             <Typography variant="h2">Criterion Comparison</Typography>
             <div>
@@ -73,7 +73,7 @@ const CriteriaForm: React.FC<CriteriaFormProps> = ({
             >
                 Next
             </Button>
-        </>
+        </Box>
     );
 };
 

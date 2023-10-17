@@ -1,5 +1,5 @@
 import NextIcon from "@mui/icons-material/NavigateNextRounded";
-import { Button, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import PairWiseComparison from "../../components/PairwiseComparison";
 import Table from "../../components/Table";
@@ -42,7 +42,7 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
     };
 
     return (
-        <>
+        <Box margin={2}>
             <Typography variant="h1">Alternative Details</Typography>
             <div>
                 {criteria.map((criterion, k) => (
@@ -90,7 +90,7 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
             >
                 Calculate
             </Button>
-        </>
+        </Box>
     );
 };
 

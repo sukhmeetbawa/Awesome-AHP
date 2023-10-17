@@ -1,5 +1,6 @@
 import axios from "axios";
 
+import { Box } from "@mui/material";
 import { useEffect } from "react";
 import BarGraph from "../../components/Graph";
 
@@ -53,7 +54,7 @@ const Result: React.FC<ResultProps> = ({
         calculateWeights();
     }, []);
     return (
-        <div>
+        <Box margin={2}>
             {result && !result.error && (
                 <div>
                     <BarGraph
@@ -68,7 +69,7 @@ const Result: React.FC<ResultProps> = ({
                     />
                 </div>
             )}
-        </div>
+        </Box>
     );
 };
 
