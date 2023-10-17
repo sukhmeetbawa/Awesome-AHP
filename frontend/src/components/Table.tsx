@@ -1,38 +1,63 @@
+import {
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+} from "@mui/material";
 import React from "react";
-import { Table as BootstrapTable } from "react-bootstrap";
 
 interface TableProps {
     data: number[][];
+    rowHeaders: string[];
+    columnHeaders: string[];
 }
 
-const StyledTable: React.FC<TableProps> = ({ data }) => {
-    const tableStyle: React.CSSProperties = {
-        width: "50%", // Set width to 50% of screen width
-        margin: "auto", // Center the table
-    };
-
+const StyledTable: React.FC<TableProps> = ({
+    data,
+    rowHeaders,
+    columnHeaders,
+}) => {
     return (
-        <BootstrapTable
-            bordered
-            hover
-            size="sm"
-            style={tableStyle}
-            className="text-center"
-        >
-            <tbody>
-                {data.map((row, rowIndex) => (
-                    <tr key={rowIndex}>
-                        {row.map((cell, cellIndex) => (
-                            <td key={cellIndex} className="align-middle">
-                                {typeof cell === "number"
-                                    ? cell.toFixed(2)
-                                    : cell}
-                            </td>
-                        ))}
-                    </tr>
-                ))}
-            </tbody>
-        </BootstrapTable>
+        <TableContainer component={Paper}>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell></TableCell>
+                        {columnHeaders &&
+                            columnHeaders.map((header, index) => (
+                                <TableCell key={index} align="center">
+                                    {header}
+                                </TableCell>
+                            ))}
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {data.map((row, rowIndex) => (
+                        <TableRow key={rowIndex}>
+                            {rowHeaders && (
+                                <TableCell
+                                    component="th"
+                                    scope="row"
+                                    align="center"
+                                >
+                                    {rowHeaders[rowIndex]}
+                                </TableCell>
+                            )}
+                            {row.map((cell, cellIndex) => (
+                                <TableCell key={cellIndex} align="center">
+                                    {typeof cell === "number"
+                                        ? cell.toFixed(2)
+                                        : cell}
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
     );
 };
 
