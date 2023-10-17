@@ -3,6 +3,7 @@ import { parseAHPData } from "../utils/parseAHPData";
 import AlternativeForm from "./Form/AlternativeForm";
 import BasicForm from "./Form/BasicForm";
 import CriteriaForm from "./Form/CriteriaForm";
+import Result from "./Form/Result";
 
 const Form = () => {
     const response = {
@@ -44,6 +45,9 @@ const Form = () => {
 
     //Usecase
     const [usecase, setUsecase] = useState<string>("");
+
+    //Result
+    const [result, setResult] = useState<AHPResult>();
 
     //Step Counter
     const [step, setStep] = useState(1);
@@ -89,6 +93,24 @@ const Form = () => {
                     alternatives={alternatives}
                     updateMatrix={setAlternativeMatrices}
                     recievedMatrix={alternativeMatrices}
+                    nextStep={nextStep}
+                />
+            );
+        case 4:
+            return (
+                <Result
+                    criteria={criteria}
+                    alternatives={alternatives}
+                    criteriaMatrix={criteriaMatrix}
+                    alternativeMatrices={alternativeMatrices}
+                    result={
+                        result || {
+                            error: "",
+                            criterionWeights: [],
+                            alternativeWeights: [],
+                        }
+                    }
+                    setResult={setResult}
                 />
             );
         default:
