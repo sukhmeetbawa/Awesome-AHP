@@ -1,21 +1,66 @@
 import NextIcon from "@mui/icons-material/SkipNextRounded";
-import BackIcon from "@mui/icons-material/SkipPreviousRounded";
 import { Button, Typography } from "@mui/material";
+import { useState } from "react";
+import PairWiseComparison from "../../components/PairwiseComparison";
+import Table from "../../components/Table";
 interface CriteriaFormProps {
-    prevStep: () => void;
     nextStep: () => void;
+    criteria: string[];
+    updateMatrix: (criteria: number[][]) => void;
+    recievedMatrix: number[][];
 }
-const CriteriaForm: React.FC<CriteriaFormProps> = ({ nextStep, prevStep }) => {
+const CriteriaForm: React.FC<CriteriaFormProps> = ({
+    nextStep,
+    updateMatrix,
+    criteria,
+    recievedMatrix,
+}) => {
+    const [matrix, setMatrix] = useState(() => recievedMatrix);
+
+    const handleComparison = (
+        value: number,
+        selected: string,
+        i: number,
+        j: number,
+    ) => {
+        setMatrix((prevMatrix: number[][]) => {
+            const newMatrix = [...prevMatrix];
+            if (selected === criteria[i]) {
+                newMatrix[i][j + i + 1] = value;
+                newMatrix[j + i + 1][i] = 1 / value;
+            } else {
+                newMatrix[j + i + 1][i] = value;
+                newMatrix[i][j + i + 1] = 1 / value;
+            }
+            updateMatrix(newMatrix);
+            return newMatrix;
+        });
+    };
+
     return (
         <>
             <Typography variant="h1">Criteria Details</Typography>
-            <Button
-                variant="contained"
-                startIcon={<BackIcon />}
-                onClick={prevStep}
-            >
-                Back
-            </Button>
+            <div>
+                {criteria.map((item1, i) =>
+                    criteria
+                        .slice(i + 1)
+                        .map((item2, j) => (
+                            <PairWiseComparison
+                                key={`${item1}-${item2}`}
+                                item1={item1}
+                                item2={item2}
+                                onComparison={(value, selected) =>
+                                    handleComparison(value, selected, i, j)
+                                }
+                                defaultPriority={matrix[i][j + i + 1]}
+                            />
+                        )),
+                )}
+                <div>
+                    <Table data={matrix} />
+                </div>
+            </div>
+
             <Button
                 onClick={nextStep}
                 variant="contained"
