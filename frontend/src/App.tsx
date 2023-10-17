@@ -1,28 +1,42 @@
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
-
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import NavigationBar from "./components/NavigationBar";
 import About from "./pages/About";
 import Credits from "./pages/Credits";
 import Form from "./pages/Form";
-import Prefrences from "./pages/Prefrences";
+import Preferences from "./pages/Prefrences";
+
+const theme = createTheme({
+    shape: { borderRadius: 8 },
+    typography: {
+        fontFamily: [
+            "-apple-system",
+            "BlinkMacSystemFont",
+            '"Segoe UI"',
+            "Roboto",
+            '"Helvetica Neue"',
+            "Arial",
+            "sans-serif",
+            '"Apple Color Emoji"',
+            '"Segoe UI Emoji"',
+            '"Segoe UI Symbol"',
+        ].join(","),
+    },
+});
 
 const newApp = () => {
     return (
-        <>
+        <ThemeProvider theme={theme}>
             <Router>
                 <NavigationBar />
                 <Routes>
                     <Route path="/" element={<Form />}></Route>
                     <Route path="/about" element={<About />}></Route>
                     <Route path="/credits" element={<Credits />}></Route>
-                    <Route path="/prefrences" element={<Prefrences />}></Route>
+                    <Route path="/prefrences" element={<Preferences />}></Route>
                 </Routes>
             </Router>
-        </>
+        </ThemeProvider>
     );
 };
 

@@ -87,6 +87,11 @@ const NavigationBar: React.FC = () => {
                                 key={link.path}
                                 to={link.path}
                                 component={Link}
+                                sx={{
+                                    "&:hover": {
+                                        borderRadius: "8px", // Adjust the value as needed
+                                    },
+                                }}
                             >
                                 <ListItemText primary={link.name} />
                             </ListItem>
