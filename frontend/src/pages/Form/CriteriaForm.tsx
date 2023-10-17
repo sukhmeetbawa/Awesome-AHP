@@ -1,4 +1,4 @@
-import NextIcon from "@mui/icons-material/SkipNextRounded";
+import NextIcon from "@mui/icons-material/NavigateNextRounded";
 import { Button, Typography } from "@mui/material";
 import { useState } from "react";
 import PairWiseComparison from "../../components/PairwiseComparison";
@@ -40,6 +40,7 @@ const CriteriaForm: React.FC<CriteriaFormProps> = ({
     return (
         <>
             <Typography variant="h1">Criteria Details</Typography>
+            <Typography variant="h2">Criterion Comparison</Typography>
             <div>
                 {criteria.map((item1, i) =>
                     criteria
@@ -57,7 +58,11 @@ const CriteriaForm: React.FC<CriteriaFormProps> = ({
                         )),
                 )}
                 <div>
-                    <Table data={matrix} />
+                    <Table
+                        data={matrix}
+                        rowHeaders={criteria}
+                        columnHeaders={criteria}
+                    />
                 </div>
             </div>
 
