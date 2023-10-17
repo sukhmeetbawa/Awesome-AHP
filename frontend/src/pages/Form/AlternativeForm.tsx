@@ -1,4 +1,4 @@
-import NextIcon from "@mui/icons-material/SkipNextRounded";
+import NextIcon from "@mui/icons-material/NavigateNextRounded";
 import { Button, Typography } from "@mui/material";
 import { useState } from "react";
 import PairWiseComparison from "../../components/PairwiseComparison";
@@ -8,12 +8,14 @@ interface AlternativeFormProps {
     alternatives: string[];
     updateMatrix: (newMatrix: number[][][]) => void;
     recievedMatrix: number[][][];
+    nextStep: () => void;
 }
 const AlternativeForm: React.FC<AlternativeFormProps> = ({
     criteria,
     alternatives,
     updateMatrix,
     recievedMatrix,
+    nextStep,
 }) => {
     const [matrix, setMatrix] = useState(() => recievedMatrix);
 
@@ -45,10 +47,9 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
             <div>
                 {criteria.map((criterion, k) => (
                     <div key={criterion}>
-                        <hr />
-                        <h2>
+                        <Typography variant="h3">
                             Alternative comparison for Criterion {criterion}
-                        </h2>
+                        </Typography>
                         {alternatives.map((alternative1, i) =>
                             alternatives
                                 .slice(i + 1)
@@ -73,13 +74,21 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
                                 )),
                         )}
                         <div key={`table-${criterion}`}>
-                            <Table data={matrix[k]} />
+                            <Table
+                                data={matrix[k]}
+                                rowHeaders={alternatives}
+                                columnHeaders={alternatives}
+                            />
                         </div>
                     </div>
                 ))}
             </div>
-            <Button disabled variant="contained" endIcon={<NextIcon />}>
-                Next
+            <Button
+                variant="contained"
+                onClick={nextStep}
+                endIcon={<NextIcon />}
+            >
+                Calculate
             </Button>
         </>
     );
