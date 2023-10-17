@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { parseAHPData } from "../utils/parseAHPData";
 import AlternativeForm from "./Form/AlternativeForm";
 import BasicForm from "./Form/BasicForm";
@@ -6,42 +7,15 @@ import CriteriaForm from "./Form/CriteriaForm";
 import Result from "./Form/Result";
 
 const Form = () => {
-    const response = {
-        criteria_comparison: {
-            Safety: [1, 3, 2],
-            Comfort: [1 / 3, 1, 1 / 2],
-            Speed: [1 / 2, 2, 1],
-        },
-        alternative_comparison: {
-            "Criterion Safety": {
-                Mercedes: [1, 1 / 3, 1 / 2],
-                BMW: [3, 1, 2],
-                Audi: [2, 1 / 2, 1],
-            },
-            "Criterion Comfort": {
-                Mercedes: [1, 1 / 3, 1 / 2],
-                BMW: [3, 1, 2],
-                Audi: [2, 1 / 2, 1],
-            },
-            "Criterion Speed": {
-                Mercedes: [1, 1 / 2, 1],
-                BMW: [2, 1, 3],
-                Audi: [1 / 2, 1 / 3, 1],
-            },
-        },
-    };
-
     //Criteria
     const [criteria, setCriteria] = useState<string[]>([]);
-    const [criteriaMatrix, setCriteriaMatrix] = useState<number[][]>(
-        parseAHPData(response).criteriaMatrix,
-    );
+    const [criteriaMatrix, setCriteriaMatrix] = useState<number[][]>([]);
 
     //Alternative
     const [alternatives, setAlternatives] = useState<string[]>([]);
     const [alternativeMatrices, setAlternativeMatrices] = useState<
         number[][][]
-    >(parseAHPData(response).alternativeMatrices);
+    >([]);
 
     //Usecase
     const [usecase, setUsecase] = useState<string>("");
@@ -52,21 +26,72 @@ const Form = () => {
     //Step Counter
     const [step, setStep] = useState(1);
 
+    //API
+    const apiKey = useCookies(["api_key"]);
+    const apiUrl = import.meta.env.VITE_API_URL;
+
     //Functions
     const nextStep: () => void = () => {
         setStep(step + 1);
     };
 
-    //Debugging
     useEffect(() => {
-        console.log("Criteria: ", criteria);
-        console.log("Alternatives: ", alternatives);
-        console.log("Usecase: ", usecase);
-        console.log("Criteria Matrix: ", criteriaMatrix);
-        console.log("Alternative Matrices: ", alternativeMatrices);
-    }, [criteria, alternatives, usecase, criteriaMatrix, alternativeMatrices]);
+        if (step === 2) getMatrices();
+    }, [step]);
 
-    //Rendering
+    const getMatrices = async () => {
+        try {
+            console.log(
+                `Sending request to API with criteria ${criteria} and alternatives ${alternatives} `,
+            );
+            // const response = await axios.post<string>(
+            //     apiUrl || "http://localhost:5000" + "/open_ai_api",
+            //     {
+            //         criterias: criteria.join(","),
+            //         alternatives: alternatives.join(","),
+            //         usecase: usecase,
+            //         apikey: apiKey[0].api_key,
+            //     },
+            //     {
+            //         headers: {
+            //             "Content-Type": "application/json",
+            //         },
+            //     },
+            // );
+            const response = {
+                criteria_comparison: {
+                    Safety: [1, 3, 5],
+                    Comfort: [1 / 3, 1, 3],
+                    Speed: [1 / 5, 1 / 3, 1],
+                },
+                alternative_comparison: {
+                    "Criterion Safety": {
+                        Mercedes: [1, 3, 5],
+                        BMW: [1 / 3, 1, 3],
+                        Audi: [1 / 5, 1 / 3, 1],
+                    },
+                    "Criterion Comfort": {
+                        Mercedes: [1, 2, 4],
+                        BMW: [1 / 2, 1, 2],
+                        Audi: [1 / 4, 1 / 2, 1],
+                    },
+                    "Criterion Speed": {
+                        Mercedes: [1, 1 / 3, 1 / 5],
+                        BMW: [3, 1, 1 / 3],
+                        Audi: [5, 3, 1],
+                    },
+                },
+            };
+            setCriteriaMatrix(parseAHPData(response).criteriaMatrix);
+            setAlternativeMatrices(parseAHPData(response).alternativeMatrices);
+            console.log("Matrices recieved from API");
+            nextStep();
+        } catch (error) {
+            console.error("Error handling button press:", error);
+        }
+    };
+
+    //Renderingd
     switch (step) {
         case 1:
             return (
@@ -77,7 +102,7 @@ const Form = () => {
                     setUsecase={setUsecase}
                 />
             );
-        case 2:
+        case 3:
             return (
                 <CriteriaForm
                     nextStep={nextStep}
@@ -86,7 +111,7 @@ const Form = () => {
                     recievedMatrix={criteriaMatrix}
                 />
             );
-        case 3:
+        case 4:
             return (
                 <AlternativeForm
                     criteria={criteria}
@@ -96,7 +121,7 @@ const Form = () => {
                     nextStep={nextStep}
                 />
             );
-        case 4:
+        case 5:
             return (
                 <Result
                     criteria={criteria}

@@ -11,7 +11,7 @@ const Preferences: React.FC = () => {
     };
 
     const handleSaveClick = () => {
-        setCookie("api_key", apiKey, { path: "/" });
+        setCookie("api_key", apiKey);
     };
 
     const handleResetClick = () => {
