@@ -175,7 +175,7 @@ def calculate_alternative_weights():
     return jsonify({'criterionWeights': result_criterion_weights, 'alternativeWeights': result_alternative_weights, 'error': error_message})
 
 
-@app.route('/open_ai_api', methods=['GET'])  # Change the method to POST # type: ignore
+@app.route('/open_ai_api', methods=['POST'])  # Change the method to POST # type: ignore
 def open_ai_api():
     criterias = None
     alternatives = None
@@ -185,10 +185,10 @@ def open_ai_api():
     if request.json is not None:
         data = request.json  # Extract JSON data from the request body
 
-        criterias = data.get('criterias', '')
-        alternatives = data.get('alternatives', '')
-        usecase = data.get('usecase', '')
-        api_key = data.get('apikey', '')
+        criterias = data.get('criterias')
+        alternatives = data.get('alternatives')
+        usecase = data.get('usecase')
+        api_key = data.get('apikey')
 
         openai.api_key = api_key
 
