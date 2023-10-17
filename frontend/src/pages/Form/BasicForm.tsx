@@ -1,5 +1,4 @@
-import NextIcon from "@mui/icons-material/SkipNextRounded";
-import BackIcon from "@mui/icons-material/SkipPreviousRounded";
+import NextIcon from "@mui/icons-material/NavigateNextRounded";
 import { Button, Stack, TextField, Typography } from "@mui/material";
 interface BasicFormProps {
     setCriteria: (criteria: string[]) => void;
@@ -73,9 +72,6 @@ const BasicForm: React.FC<BasicFormProps> = ({
                 />
             </div>
             <div>
-                <Button variant="contained" startIcon={<BackIcon />} disabled>
-                    Back
-                </Button>
                 <Button
                     onClick={nextStep}
                     variant="contained"
