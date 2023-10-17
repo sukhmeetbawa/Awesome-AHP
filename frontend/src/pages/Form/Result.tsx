@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { useEffect } from "react";
-import BarGraph from "../../components/BarGraph";
+import BarGraph from "../../components/Graph";
 
 interface ResultProps {
     criteriaMatrix: number[][];
@@ -55,12 +55,12 @@ const Result: React.FC<ResultProps> = ({
     return (
         <div>
             {result && !result.error && (
-                <div className="mx-auto">
+                <div>
                     <BarGraph
                         data={result?.alternativeWeights || []}
                         labels={alternatives}
                         label="Alternatives"
-                    />{" "}
+                    />
                     <BarGraph
                         data={result?.criterionWeights || []}
                         labels={criteria}
