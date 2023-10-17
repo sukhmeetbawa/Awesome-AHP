@@ -1,6 +1,23 @@
 import { Button, Stack, TextField, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { useCookies } from "react-cookie";
 
-const Preferences = () => {
+const Preferences: React.FC = () => {
+    const [cookies, setCookie, removeCookie] = useCookies(["api_key"]);
+    const [apiKey, setApiKey] = useState<string>(cookies.api_key || "");
+
+    const handleApiKeyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setApiKey(event.target.value);
+    };
+
+    const handleSaveClick = () => {
+        setCookie("api_key", apiKey, { path: "/" });
+    };
+
+    const handleResetClick = () => {
+        removeCookie("api_key");
+    };
+
     return (
         <Stack spacing={2} margin={2}>
             <Typography variant="h5">Preferences</Typography>
@@ -9,11 +26,24 @@ const Preferences = () => {
                 size="small"
                 placeholder="Enter your API key"
                 label="API Key"
+                value={apiKey}
+                onChange={handleApiKeyChange}
             />
 
             <div>
-                <Button variant="contained" color="primary">
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSaveClick}
+                >
                     Save
+                </Button>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleResetClick}
+                >
+                    Reset
                 </Button>
             </div>
         </Stack>
