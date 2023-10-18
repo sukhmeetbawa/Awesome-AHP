@@ -1,4 +1,8 @@
+import RestoreRoundedIcon from "@mui/icons-material/RestoreRounded";
+import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
+
 import { Button, Stack, TextField, Typography } from "@mui/material";
+
 import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 
@@ -35,6 +39,7 @@ const Preferences: React.FC = () => {
                     variant="contained"
                     color="primary"
                     onClick={handleSaveClick}
+                    startIcon={<SaveRoundedIcon />}
                 >
                     Save
                 </Button>
@@ -42,6 +47,7 @@ const Preferences: React.FC = () => {
                     variant="contained"
                     color="secondary"
                     onClick={handleResetClick}
+                    startIcon={<RestoreRoundedIcon />}
                 >
                     Reset
                 </Button>
