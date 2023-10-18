@@ -1,3 +1,4 @@
+import { Box, Step, StepLabel, Stepper } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { parseAHPData } from "../utils/parseAHPData";
@@ -16,6 +17,14 @@ const Form = () => {
     const [alternativeMatrices, setAlternativeMatrices] = useState<
         number[][][]
     >([]);
+
+    const steps = [
+        "Basic Details",
+        "Getting Input",
+        "Criteria Details",
+        "Alternative Details",
+        "Result",
+    ];
 
     //Usecase
     const [usecase, setUsecase] = useState<string>("");
@@ -92,37 +101,45 @@ const Form = () => {
     };
 
     //Renderingd
-    switch (step) {
-        case 1:
-            return (
+    return (
+        <Box marginY={2}>
+            <Stepper activeStep={step - 1} alternativeLabel>
+                {steps.map((label, index) => (
+                    <Step key={index}>
+                        <StepLabel>{label}</StepLabel>
+                    </Step>
+                ))}
+            </Stepper>
+
+            {step === 1 && (
                 <BasicForm
                     nextStep={nextStep}
                     setCriteria={setCriteria}
                     setAlternatives={setAlternatives}
                     setUsecase={setUsecase}
                 />
-            );
-        case 3:
-            return (
+            )}
+
+            {step === 3 && (
                 <CriteriaForm
                     nextStep={nextStep}
                     criteria={criteria}
                     updateMatrix={setCriteriaMatrix}
                     recievedMatrix={criteriaMatrix}
                 />
-            );
-        case 4:
-            return (
+            )}
+
+            {step === 4 && (
                 <AlternativeForm
                     criteria={criteria}
                     alternatives={alternatives}
                     updateMatrix={setAlternativeMatrices}
-                    recievedMatrix={alternativeMatrices}
                     nextStep={nextStep}
+                    recievedMatrix={alternativeMatrices}
                 />
-            );
-        case 5:
-            return (
+            )}
+
+            {step === 5 && (
                 <Result
                     criteria={criteria}
                     alternatives={alternatives}
@@ -137,9 +154,8 @@ const Form = () => {
                     }
                     setResult={setResult}
                 />
-            );
-        default:
-            console.log("This is a multi-step form built with React.");
-    }
+            )}
+        </Box>
+    );
 };
 export default Form;
