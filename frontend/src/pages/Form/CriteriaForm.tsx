@@ -45,8 +45,8 @@ const CriteriaForm: React.FC<CriteriaFormProps> = ({
                     <Typography variant="h1">Criteria Details</Typography>
                     <Typography variant="h2">Criterion Comparison</Typography>
                 </Grid>
-                <Grid container item xs={12} sm={9} className="classes.root">
-                    <Box overflow="auto" maxHeight="400px" width="100%">
+                <Grid container item xs={9} className="classes.root">
+                    <Box overflow="auto" maxHeight="320px" width="100%">
                         {criteria.map((item1, i) =>
                             criteria.slice(i + 1).map((item2, j) => (
                                 <Grid
@@ -76,12 +76,11 @@ const CriteriaForm: React.FC<CriteriaFormProps> = ({
                 <Grid
                     container
                     item
-                    xs={12}
-                    sm={3}
+                    xs={3}
                     justifyContent="center"
                     alignItems="center"
                 >
-                    <Typography variant="h2">Criteria Matrix</Typography>
+                    <Typography variant="h4">Criteria Matrix</Typography>
                     <StyledTable
                         data={matrix}
                         rowHeaders={criteria}
