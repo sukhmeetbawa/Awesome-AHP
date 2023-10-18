@@ -1,0 +1,15 @@
+/* Track */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #2196f3; /* Change this to your desired color */
+    border-radius: 8px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #0a5ad3; /* Change this to your desired color on hover */
+}

@@ -1,8 +1,9 @@
 import NextIcon from "@mui/icons-material/NavigateNextRounded";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import { useState } from "react";
 import PairWiseComparison from "../../components/PairwiseComparison";
-import Table from "../../components/Table";
+import StyledTable from "../../components/Table";
+import "../../styles/Scrollbar.css";
 interface CriteriaFormProps {
     nextStep: () => void;
     criteria: string[];
@@ -15,7 +16,7 @@ const CriteriaForm: React.FC<CriteriaFormProps> = ({
     criteria,
     recievedMatrix,
 }) => {
-    const [matrix, setMatrix] = useState(() => recievedMatrix);
+    const [matrix, setMatrix] = useState<number[][]>(recievedMatrix);
 
     const handleComparison = (
         value: number,
@@ -38,41 +39,65 @@ const CriteriaForm: React.FC<CriteriaFormProps> = ({
     };
 
     return (
-        <Box margin={2}>
-            <Typography variant="h1">Criteria Details</Typography>
-            <Typography variant="h2">Criterion Comparison</Typography>
-            <div>
-                {criteria.map((item1, i) =>
-                    criteria
-                        .slice(i + 1)
-                        .map((item2, j) => (
-                            <PairWiseComparison
-                                key={`${item1}-${item2}`}
-                                item1={item1}
-                                item2={item2}
-                                onComparison={(value, selected) =>
-                                    handleComparison(value, selected, i, j)
-                                }
-                                defaultPriority={matrix[i][j + i + 1]}
-                            />
-                        )),
-                )}
-                <div>
-                    <Table
+        <Box marginX="16px">
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <Typography variant="h1">Criteria Details</Typography>
+                    <Typography variant="h2">Criterion Comparison</Typography>
+                </Grid>
+                <Grid container item xs={12} sm={9} className="classes.root">
+                    <Box overflow="auto" maxHeight="400px" width="100%">
+                        {criteria.map((item1, i) =>
+                            criteria.slice(i + 1).map((item2, j) => (
+                                <Grid
+                                    item
+                                    xs={12}
+                                    key={`${item1}-${item2}`}
+                                    width="95%"
+                                >
+                                    <PairWiseComparison
+                                        item1={item1}
+                                        item2={item2}
+                                        onComparison={(value, selected) =>
+                                            handleComparison(
+                                                value,
+                                                selected,
+                                                i,
+                                                j,
+                                            )
+                                        }
+                                        defaultPriority={matrix[i][j + i + 1]}
+                                    />
+                                </Grid>
+                            )),
+                        )}
+                    </Box>
+                </Grid>
+                <Grid
+                    container
+                    item
+                    xs={12}
+                    sm={3}
+                    justifyContent="center"
+                    alignItems="center"
+                >
+                    <Typography variant="h2">Criteria Matrix</Typography>
+                    <StyledTable
                         data={matrix}
                         rowHeaders={criteria}
                         columnHeaders={criteria}
                     />
-                </div>
-            </div>
-
-            <Button
-                onClick={nextStep}
-                variant="contained"
-                endIcon={<NextIcon />}
-            >
-                Next
-            </Button>
+                </Grid>
+                <Grid item xs={12}>
+                    <Button
+                        onClick={nextStep}
+                        variant="contained"
+                        endIcon={<NextIcon />}
+                    >
+                        Next
+                    </Button>
+                </Grid>
+            </Grid>
         </Box>
     );
 };
