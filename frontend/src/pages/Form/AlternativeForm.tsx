@@ -1,5 +1,5 @@
 import NextIcon from "@mui/icons-material/NavigateNextRounded";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import { useState } from "react";
 import PairWiseComparison from "../../components/PairwiseComparison";
 import Table from "../../components/Table";
@@ -42,54 +42,92 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
     };
 
     return (
-        <Box margin={2}>
-            <Typography variant="h1">Alternative Details</Typography>
-            <div>
-                {criteria.map((criterion, k) => (
-                    <div key={criterion}>
-                        <Typography variant="h3">
-                            Alternative comparison for Criterion {criterion}
-                        </Typography>
-                        {alternatives.map((alternative1, i) =>
-                            alternatives
-                                .slice(i + 1)
-                                .map((alternative2, j) => (
-                                    <PairWiseComparison
-                                        key={`${alternative1}-${alternative2}`}
-                                        item1={alternative1}
-                                        item2={alternative2}
-                                        onComparison={(value, selected) =>
-                                            handleComparison(
-                                                value,
-                                                selected,
-                                                k,
-                                                i,
-                                                j + i + 1,
-                                            )
-                                        }
-                                        defaultPriority={
-                                            matrix[k][i][j + i + 1]
-                                        }
-                                    />
-                                )),
-                        )}
-                        <div key={`table-${criterion}`}>
-                            <Table
-                                data={matrix[k]}
-                                rowHeaders={alternatives}
-                                columnHeaders={alternatives}
-                            />
-                        </div>
-                    </div>
-                ))}
-            </div>
-            <Button
-                variant="contained"
-                onClick={nextStep}
-                endIcon={<NextIcon />}
-            >
-                Calculate
-            </Button>
+        <Box marginX="16px">
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <Typography variant="h1">Alternative Details</Typography>
+                    {criteria.map((criterion, k) => (
+                        <Grid key={criterion} container>
+                            <Grid item xs={12}>
+                                <Typography variant="h3">
+                                    Alternative comparison for Criterion{" "}
+                                    {criterion}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={9}>
+                                <Grid container item className="classes.root">
+                                    <Box
+                                        overflow="auto"
+                                        maxHeight="320px"
+                                        width="100%"
+                                    >
+                                        {alternatives.map((alternative1, i) =>
+                                            alternatives
+                                                .slice(i + 1)
+                                                .map((alternative2, j) => (
+                                                    <Grid
+                                                        item
+                                                        xs={12}
+                                                        key={`${alternative1}-${alternative2}`}
+                                                        width="95%"
+                                                    >
+                                                        <PairWiseComparison
+                                                            item1={alternative1}
+                                                            item2={alternative2}
+                                                            onComparison={(
+                                                                value,
+                                                                selected,
+                                                            ) =>
+                                                                handleComparison(
+                                                                    value,
+                                                                    selected,
+                                                                    k,
+                                                                    i,
+                                                                    j + i + 1,
+                                                                )
+                                                            }
+                                                            defaultPriority={
+                                                                matrix[k][i][
+                                                                    j + i + 1
+                                                                ]
+                                                            }
+                                                        />
+                                                    </Grid>
+                                                )),
+                                        )}
+                                    </Box>
+                                </Grid>
+                            </Grid>
+                            <Grid
+                                container
+                                item
+                                xs={3}
+                                justifyContent="center"
+                                alignItems="center"
+                                key={`table-${criterion}`}
+                            >
+                                <Typography variant="h4">
+                                    Alternative Matrix
+                                </Typography>
+
+                                <Table
+                                    data={matrix[k]}
+                                    rowHeaders={alternatives}
+                                    columnHeaders={alternatives}
+                                />
+                            </Grid>
+                        </Grid>
+                    ))}
+                </Grid>
+
+                <Button
+                    variant="contained"
+                    onClick={nextStep}
+                    endIcon={<NextIcon />}
+                >
+                    Calculate
+                </Button>
+            </Grid>
         </Box>
     );
 };
