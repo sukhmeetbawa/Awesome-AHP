@@ -1,6 +1,5 @@
 import { Step, StepLabel, Stepper } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
 import AlternativeForm from "./Form/AlternativeForm";
 import BasicForm from "./Form/BasicForm";
 import CriteriaForm from "./Form/CriteriaForm";
@@ -25,7 +24,7 @@ const Form = () => {
     ];
 
     //Usecase
-    const [usecase, setUsecase] = useState<string>("");
+    const [_usecase, setUsecase] = useState<string>("");
 
     //Result
     const [result, setResult] = useState<AHPResult>();
@@ -34,8 +33,8 @@ const Form = () => {
     const [step, setStep] = useState(1);
 
     //API
-    const apiKey = useCookies(["api_key"]);
-    const apiUrl = import.meta.env.VITE_API_URL;
+    // const apiKey = useCookies(["api_key"]);
+    // const apiUrl = import.meta.env.VITE_API_URL;
 
     //Functions
     const nextStep: () => void = () => {
