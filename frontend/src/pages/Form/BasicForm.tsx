@@ -71,6 +71,7 @@ const BasicForm: React.FC<BasicFormProps> = ({
                     onChange={handleUsecaseChange}
                 />
             </div>
+            <br />
             <div>
                 <Button
                     onClick={nextStep}

@@ -1,4 +1,5 @@
 import {
+    Box,
     FormControlLabel,
     Radio,
     RadioGroup,
@@ -72,15 +73,17 @@ const PairWiseComparison: React.FC<Props> = ({
             <Typography variant="body1">
                 How much higher is {higher} in comparison with {lower}?
             </Typography>
-            <Slider
-                value={priority}
-                onChange={handleSliderChange}
-                valueLabelDisplay="auto"
-                step={1}
-                marks
-                min={1}
-                max={9}
-            />
+            <Box margin={2}>
+                <Slider
+                    value={priority}
+                    onChange={handleSliderChange}
+                    valueLabelDisplay="auto"
+                    step={1}
+                    marks
+                    min={1}
+                    max={9}
+                />
+            </Box>
         </div>
     );
 };
