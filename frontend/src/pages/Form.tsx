@@ -1,7 +1,6 @@
 import { Step, StepLabel, Stepper } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { parseAHPData } from "../utils/parseAHPData";
 import AlternativeForm from "./Form/AlternativeForm";
 import BasicForm from "./Form/BasicForm";
 import CriteriaForm from "./Form/CriteriaForm";
@@ -20,7 +19,6 @@ const Form = () => {
 
     const steps = [
         "Basic Details",
-        "Getting Input",
         "Criteria Details",
         "Alternative Details",
         "Result",
@@ -45,60 +43,16 @@ const Form = () => {
     };
 
     useEffect(() => {
-        if (step === 2) getMatrices();
-    }, [step]);
-
-    const getMatrices = async () => {
-        try {
-            console.log(
-                `Sending request to API with criteria ${criteria} and alternatives ${alternatives} `,
+        if (step === 2) {
+            setAlternativeMatrices(() =>
+                Array.from(Array(criteria.length), () =>
+                    Array.from(Array(alternatives.length), () =>
+                        new Array(alternatives.length).fill(1),
+                    ),
+                ),
             );
-            // const response = await axios.post<string>(
-            //     apiUrl || "http://localhost:5000" + "/open_ai_api",
-            //     {
-            //         criterias: criteria.join(","),
-            //         alternatives: alternatives.join(","),
-            //         usecase: usecase,
-            //         apikey: apiKey[0].api_key,
-            //     },
-            //     {
-            //         headers: {
-            //             "Content-Type": "application/json",
-            //         },
-            //     },
-            // );
-            const response = {
-                criteria_comparison: {
-                    Safety: [1, 3, 5],
-                    Comfort: [1 / 3, 1, 3],
-                    Speed: [1 / 5, 1 / 3, 1],
-                },
-                alternative_comparison: {
-                    "Criterion Safety": {
-                        Mercedes: [1, 3, 5],
-                        BMW: [1 / 3, 1, 3],
-                        Audi: [1 / 5, 1 / 3, 1],
-                    },
-                    "Criterion Comfort": {
-                        Mercedes: [1, 2, 4],
-                        BMW: [1 / 2, 1, 2],
-                        Audi: [1 / 4, 1 / 2, 1],
-                    },
-                    "Criterion Speed": {
-                        Mercedes: [1, 1 / 3, 1 / 5],
-                        BMW: [3, 1, 1 / 3],
-                        Audi: [5, 3, 1],
-                    },
-                },
-            };
-            setCriteriaMatrix(parseAHPData(response).criteriaMatrix);
-            setAlternativeMatrices(parseAHPData(response).alternativeMatrices);
-            console.log("Matrices recieved from API");
-            nextStep();
-        } catch (error) {
-            console.error("Error handling button press:", error);
         }
-    };
+    }, [step]);
 
     //Renderingd
     return (
@@ -120,16 +74,18 @@ const Form = () => {
                 />
             )}
 
-            {step === 3 && (
+            {step === 2 && (
                 <CriteriaForm
                     nextStep={nextStep}
                     criteria={criteria}
                     updateMatrix={setCriteriaMatrix}
-                    recievedMatrix={criteriaMatrix}
+                    recievedMatrix={Array.from(Array(criteria.length), () =>
+                        new Array(criteria.length).fill(1),
+                    )}
                 />
             )}
 
-            {step === 4 && (
+            {step === 3 && (
                 <AlternativeForm
                     criteria={criteria}
                     alternatives={alternatives}
@@ -139,12 +95,18 @@ const Form = () => {
                 />
             )}
 
-            {step === 5 && (
+            {step === 4 && (
                 <Result
                     criteria={criteria}
                     alternatives={alternatives}
                     criteriaMatrix={criteriaMatrix}
-                    alternativeMatrices={alternativeMatrices}
+                    alternativeMatrices={Array.from(
+                        Array(criteria.length),
+                        () =>
+                            Array.from(Array(alternatives.length), () =>
+                                new Array(alternatives.length).fill(1),
+                            ),
+                    )}
                     result={
                         result || {
                             error: "",
