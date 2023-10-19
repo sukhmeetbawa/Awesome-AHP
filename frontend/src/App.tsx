@@ -5,22 +5,18 @@ import About from "./pages/About";
 import Credits from "./pages/Credits";
 import Form from "./pages/Form";
 import Preferences from "./pages/Prefrences";
-
+import "./styles/Fonts.css";
 const theme = createTheme({
     shape: { borderRadius: 8 },
     typography: {
-        fontFamily: [
-            "-apple-system",
-            "BlinkMacSystemFont",
-            '"Segoe UI"',
-            "Roboto",
-            '"Helvetica Neue"',
-            "Arial",
-            "sans-serif",
-            '"Apple Color Emoji"',
-            '"Segoe UI Emoji"',
-            '"Segoe UI Symbol"',
-        ].join(","),
+        fontFamily: "San Francisco",
+    },
+    components: {
+        MuiCssBaseline: {
+            styleOverrides: {
+                fontFamily: "San Francisco",
+            },
+        },
     },
 });
 
