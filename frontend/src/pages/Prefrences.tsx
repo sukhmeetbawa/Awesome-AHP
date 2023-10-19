@@ -23,7 +23,7 @@ const Preferences: React.FC = () => {
     };
 
     return (
-        <Stack spacing={2} margin={2}>
+        <Stack spacing={2}>
             <Typography variant="h5">Preferences</Typography>
             <Typography variant="h5">API Key</Typography>
             <TextField

@@ -42,7 +42,7 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
     };
 
     return (
-        <Box marginX="16px">
+        <>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <Typography variant="h1">Alternative Details</Typography>
@@ -128,7 +128,7 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
                     Calculate
                 </Button>
             </Grid>
-        </Box>
+        </>
     );
 };
 

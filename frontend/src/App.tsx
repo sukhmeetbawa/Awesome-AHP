@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import NavigationBar from "./components/NavigationBar";
@@ -25,12 +26,17 @@ const newApp = () => {
         <ThemeProvider theme={theme}>
             <Router>
                 <NavigationBar />
-                <Routes>
-                    <Route path="/" element={<Form />}></Route>
-                    <Route path="/about" element={<About />}></Route>
-                    <Route path="/credits" element={<Credits />}></Route>
-                    <Route path="/prefrences" element={<Preferences />}></Route>
-                </Routes>
+                <Box margin={2}>
+                    <Routes>
+                        <Route path="/" element={<Form />}></Route>
+                        <Route path="/about" element={<About />}></Route>
+                        <Route path="/credits" element={<Credits />}></Route>
+                        <Route
+                            path="/prefrences"
+                            element={<Preferences />}
+                        ></Route>
+                    </Routes>
+                </Box>
             </Router>
         </ThemeProvider>
     );

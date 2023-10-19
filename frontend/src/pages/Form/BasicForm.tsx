@@ -1,5 +1,5 @@
 import NextIcon from "@mui/icons-material/NavigateNextRounded";
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 interface BasicFormProps {
     setCriteria: (criteria: string[]) => void;
     setAlternatives: (alternatives: string[]) => void;
@@ -45,7 +45,7 @@ const BasicForm: React.FC<BasicFormProps> = ({
     };
 
     return (
-        <Stack spacing={2} margin={2}>
+        <>
             <Typography variant="h1">Basic Details</Typography>
             <div>
                 <Typography variant="h2">Criteria</Typography>
@@ -80,7 +80,7 @@ const BasicForm: React.FC<BasicFormProps> = ({
                     Next
                 </Button>
             </div>
-        </Stack>
+        </>
     );
 };
 

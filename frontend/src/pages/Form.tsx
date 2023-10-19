@@ -1,4 +1,4 @@
-import { Box, Step, StepLabel, Stepper } from "@mui/material";
+import { Step, StepLabel, Stepper } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { parseAHPData } from "../utils/parseAHPData";
@@ -102,7 +102,7 @@ const Form = () => {
 
     //Renderingd
     return (
-        <Box marginY={2}>
+        <>
             <Stepper activeStep={step - 1} alternativeLabel>
                 {steps.map((label, index) => (
                     <Step key={index}>
@@ -155,7 +155,7 @@ const Form = () => {
                     setResult={setResult}
                 />
             )}
-        </Box>
+        </>
     );
 };
 export default Form;

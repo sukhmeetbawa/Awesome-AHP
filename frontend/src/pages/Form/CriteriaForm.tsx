@@ -39,7 +39,7 @@ const CriteriaForm: React.FC<CriteriaFormProps> = ({
     };
 
     return (
-        <Box marginX="16px">
+        <>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <Typography variant="h1">Criteria Details</Typography>
@@ -97,7 +97,7 @@ const CriteriaForm: React.FC<CriteriaFormProps> = ({
                     </Button>
                 </Grid>
             </Grid>
-        </Box>
+        </>
     );
 };
 
