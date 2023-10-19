@@ -5,3 +5,8 @@
     font-style: normal;
     src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
 }
+
+* {
+    font-family: "San Francisco", "Helvetica Neue", "Helvetica", "Arial",
+        sans-serif;
+}
