@@ -1,7 +1,7 @@
 import MenuIcon from "@mui/icons-material/Menu";
+
 import {
     AppBar,
-    Button,
     IconButton,
     List,
     ListItem,
@@ -98,9 +98,6 @@ const NavigationBar: React.FC = () => {
                         ))}
                     </List>
                 )}
-                <Button color="inherit" component={Link} to="/login">
-                    Login
-                </Button>
             </Toolbar>
         </AppBar>
     );
