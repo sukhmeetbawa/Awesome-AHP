@@ -1,6 +1,6 @@
+import { Box, CircularProgress } from "@mui/material";
 import axios from "axios";
-
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import BarGraph from "../../components/Graph";
 
 interface ResultProps {
@@ -22,6 +22,8 @@ const Result: React.FC<ResultProps> = ({
     result,
     setResult,
 }) => {
+    const [loading, setLoading] = useState(true);
+
     const calculateWeights = async () => {
         try {
             const response = await axios.post<AHPResult>(
@@ -47,14 +49,27 @@ const Result: React.FC<ResultProps> = ({
         } catch (error) {
             console.error("Error calculating weights:", error);
         } finally {
+            setLoading(false);
         }
     };
+
     useEffect(() => {
         calculateWeights();
     }, []);
+
     return (
         <>
-            {result && !result.error && (
+            {loading && (
+                <Box
+                    alignItems="center"
+                    display="flex"
+                    justifyContent="center"
+                    height="75vh"
+                >
+                    <CircularProgress />
+                </Box>
+            )}
+            {!loading && result && !result.error && (
                 <div>
                     <BarGraph
                         data={result?.alternativeWeights || []}
