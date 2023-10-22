@@ -40,13 +40,13 @@ const CriteriaForm: React.FC<CriteriaFormProps> = ({
 
     return (
         <>
-            <Grid container spacing={2}>
+            <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <Typography variant="h1">Criteria Details</Typography>
-                    <Typography variant="h2">Criterion Comparison</Typography>
+                    <Typography variant="h2">Criteria Details</Typography>
+                    <Typography variant="h4">Criterion Comparison</Typography>
                 </Grid>
                 <Grid container item xs={9} className="classes.root">
-                    <Box overflow="auto" maxHeight="320px" width="100%">
+                    <Box overflow="auto" maxHeight="380px" width="100%">
                         {criteria.map((item1, i) =>
                             criteria.slice(i + 1).map((item2, j) => (
                                 <Grid

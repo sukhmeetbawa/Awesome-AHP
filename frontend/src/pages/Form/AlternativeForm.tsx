@@ -45,11 +45,11 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
         <>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <Typography variant="h1">Alternative Details</Typography>
+                    <Typography variant="h2">Alternative Details</Typography>
                     {criteria.map((criterion, k) => (
                         <Grid key={criterion} container>
                             <Grid item xs={12}>
-                                <Typography variant="h3">
+                                <Typography variant="h4">
                                     Alternative comparison for Criterion{" "}
                                     {criterion}
                                 </Typography>
@@ -58,7 +58,7 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
                                 <Grid container item className="classes.root">
                                     <Box
                                         overflow="auto"
-                                        maxHeight="320px"
+                                        maxHeight="360px"
                                         width="100%"
                                     >
                                         {alternatives.map((alternative1, i) =>

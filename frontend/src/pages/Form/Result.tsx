@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Stack } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import BarGraph from "../../components/Graph";
@@ -70,7 +70,7 @@ const Result: React.FC<ResultProps> = ({
                 </Box>
             )}
             {!loading && result && !result.error && (
-                <div>
+                <Stack paddingTop={4} spacing={4} width="50%" margin="auto">
                     <BarGraph
                         data={result?.alternativeWeights || []}
                         labels={alternatives}
@@ -81,7 +81,7 @@ const Result: React.FC<ResultProps> = ({
                         labels={criteria}
                         label="Criteria"
                     />
-                </div>
+                </Stack>
             )}
         </>
     );
