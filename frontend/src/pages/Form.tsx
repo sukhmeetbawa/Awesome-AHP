@@ -1,4 +1,5 @@
 import { Step, StepLabel, Stepper } from "@mui/material";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { parseAHPData } from "../utils/parseAHPData";
@@ -53,46 +54,28 @@ const Form = () => {
             console.log(
                 `Sending request to API with criteria ${criteria} and alternatives ${alternatives} `,
             );
-            // const response = await axios.post<string>(
-            //     apiUrl || "http://localhost:5000" + "/open_ai_api",
-            //     {
-            //         criterias: criteria.join(","),
-            //         alternatives: alternatives.join(","),
-            //         usecase: usecase,
-            //         apikey: apiKey[0].api_key,
-            //     },
-            //     {
-            //         headers: {
-            //             "Content-Type": "application/json",
-            //         },
-            //     },
-            // );
-            const response = {
-                criteria_comparison: {
-                    Safety: [1, 3, 5],
-                    Comfort: [1 / 3, 1, 3],
-                    Speed: [1 / 5, 1 / 3, 1],
+            const response = await axios.post<string>(
+                apiUrl || "http://localhost:5000" + "/open_ai_api",
+                {
+                    criterias: criteria.join(","),
+                    alternatives: alternatives.join(","),
+                    usecase: usecase,
+                    apikey: apiKey[0].api_key,
                 },
-                alternative_comparison: {
-                    "Criterion Safety": {
-                        Mercedes: [1, 3, 5],
-                        BMW: [1 / 3, 1, 3],
-                        Audi: [1 / 5, 1 / 3, 1],
-                    },
-                    "Criterion Comfort": {
-                        Mercedes: [1, 2, 4],
-                        BMW: [1 / 2, 1, 2],
-                        Audi: [1 / 4, 1 / 2, 1],
-                    },
-                    "Criterion Speed": {
-                        Mercedes: [1, 1 / 3, 1 / 5],
-                        BMW: [3, 1, 1 / 3],
-                        Audi: [5, 3, 1],
+                {
+                    headers: {
+                        "Content-Type": "application/json",
                     },
                 },
-            };
-            setCriteriaMatrix(parseAHPData(response).criteriaMatrix);
-            setAlternativeMatrices(parseAHPData(response).alternativeMatrices);
+            );
+
+            console.log(response.data);
+            // const regex = /\{[\s\S]*\}$/;
+            const { criteriaMatrix, alternativeMatrices } = parseAHPData(
+                JSON.stringify(response.data),
+            );
+            setCriteriaMatrix(criteriaMatrix);
+            setAlternativeMatrices(alternativeMatrices);
             console.log("Matrices recieved from API");
             nextStep();
         } catch (error) {
