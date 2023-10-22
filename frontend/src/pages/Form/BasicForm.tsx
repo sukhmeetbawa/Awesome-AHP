@@ -1,5 +1,5 @@
 import NextIcon from "@mui/icons-material/NavigateNextRounded";
-import { Button, TextField, Typography } from "@mui/material";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 interface BasicFormProps {
     setCriteria: (criteria: string[]) => void;
     setAlternatives: (alternatives: string[]) => void;
@@ -45,33 +45,60 @@ const BasicForm: React.FC<BasicFormProps> = ({
     };
 
     return (
-        <>
-            <Typography variant="h1">Basic Details</Typography>
-            <div>
-                <Typography variant="h2">Criteria</Typography>
-                <TextField
-                    size="small"
-                    label="Enter the Criterias"
-                    onChange={handleCriteriaChange}
-                />
-            </div>
-            <div>
-                <Typography variant="h2">Alternative</Typography>
-                <TextField
-                    size="small"
-                    label="Enter the Alternative"
-                    onChange={handleAlternativeChange}
-                />
-            </div>
-            <div>
-                <Typography variant="h2">Usecase</Typography>
-                <TextField
-                    size="small"
-                    label="Enter the Usecase"
-                    onChange={handleUsecaseChange}
-                />
-            </div>
-            <div>
+        <Grid
+            container
+            spacing={3}
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+        >
+            <Grid item xs={12}>
+                <Typography variant="h2" style={{ textAlign: "center" }}>
+                    Basic Details
+                </Typography>
+            </Grid>
+            <Grid container item xs={12}>
+                <Grid item xs />
+                <Grid item xs={4}>
+                    <Typography variant="h5">Criteria</Typography>
+                    <TextField
+                        size="small"
+                        label="Enter the Criterias"
+                        onChange={handleCriteriaChange}
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs />
+            </Grid>
+            <Grid container item xs={12}>
+                <Grid item xs />
+                <Grid item xs={4}>
+                    <Typography variant="h5">Alternative</Typography>
+                    <TextField
+                        size="small"
+                        label="Enter the Alternative"
+                        onChange={handleAlternativeChange}
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs />
+            </Grid>
+            <Grid item container xs={12}>
+                <Grid item xs />
+
+                <Grid item xs={4}>
+                    <Typography variant="h5">Usecase</Typography>
+                    <TextField
+                        size="small"
+                        label="Enter the Usecase"
+                        onChange={handleUsecaseChange}
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs />
+            </Grid>
+            <Grid item xs>
+                <br />
                 <Button
                     onClick={nextStep}
                     variant="contained"
@@ -79,8 +106,8 @@ const BasicForm: React.FC<BasicFormProps> = ({
                 >
                     Next
                 </Button>
-            </div>
-        </>
+            </Grid>
+        </Grid>
     );
 };
 
