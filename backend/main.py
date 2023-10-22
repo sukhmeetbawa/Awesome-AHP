@@ -79,7 +79,7 @@ def generatePrompt(criteria, alternatives, usecase):
     prompt += "consider " + criteria + " as therir criteria \n"
     prompt += "consider " + alternatives + " as their alternatives \n\n"
     prompt += "write down values for priority establishment state based on educated guess \n"
-    prompt += "values lies between value of 1 to 9 dont use decimal values for which priority is higher and use 1/value for which it has less priority \n here 1 is equal and 9 is has the most priority also tell me which value from two has higher priority \n\n"
+    prompt += "values lies between value of 1 to 9 dont use decimal values for which priority is higher and use 1/value \" in decimal format \" for which it has less priority \n here 1 is equal and 9 is has the most priority also tell me which value from two has higher priority \n\n"
     prompt += "- pairwise comparision of the criterias (Compare each criterias) \n"
     prompt += "create a criterian table with all " + str(len(criteria_list)) + " criteria comparision with each other \n"
 
