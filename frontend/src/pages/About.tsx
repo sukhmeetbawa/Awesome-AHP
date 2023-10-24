@@ -19,11 +19,11 @@ const About = () => {
         </Typography>
         <br/>
         <Typography variant="h6" textAlign="justify">
-        This project serves as a proof of concept, showcasing the utilization of Large Language Models (LLMs) to generate criteria and alternative values within the context of the Analytical Hierarchy Process (AHP) algorithm, with the ultimate aim of providing personalized recommendations to the end user. In essence, it explores the feasibility and potential applications of employing LLMs in the decision-making process, particularly in the realm of AHP, to enhance the user's decision-making experience.
+        The AHP Calculator with ChatGPT Integration is a web-based tool designed to streamline your decision-making process. You can create and manage decision hierarchies, input criteria and alternatives, and perform AHP calculations. With ChatGPT integration, you can receive textual summaries, recommendations, and insights to support your decisions.
         </Typography>
         <br/>
         <Typography variant="h6" textAlign="justify">
-        The AHP Calculator with ChatGPT Integration is a web-based tool designed to streamline your decision-making process. You can create and manage decision hierarchies, input criteria and alternatives, and perform AHP calculations. With ChatGPT integration, you can receive textual summaries, recommendations, and insights to support your decisions.
+        This project serves as a proof of concept, showcasing the utilization of Large Language Models (LLMs) to generate criteria and alternative values within the context of the Analytical Hierarchy Process (AHP) algorithm, with the ultimate aim of providing personalized recommendations to the end user. In essence, it explores the feasibility and potential applications of employing LLMs in the decision-making process, particularly in the realm of AHP, to enhance the user's decision-making experience.
         </Typography>
     </Box>
 </Stack>
