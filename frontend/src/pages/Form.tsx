@@ -1,11 +1,9 @@
 import { Step, StepLabel, Stepper } from "@mui/material";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
-import { parseAHPData } from "../utils/parseAHPData";
+import { useState } from "react";
 import AlternativeForm from "./Form/AlternativeForm";
 import BasicForm from "./Form/BasicForm";
 import CriteriaForm from "./Form/CriteriaForm";
+import Response from "./Form/Response";
 import Result from "./Form/Result";
 
 const Form = () => {
@@ -36,54 +34,12 @@ const Form = () => {
     //Step Counter
     const [step, setStep] = useState(1);
 
-    //API
-    const apiKey = useCookies(["api_key"]);
-    const apiUrl = import.meta.env.VITE_API_URL;
-
     //Functions
     const nextStep: () => void = () => {
         setStep(step + 1);
     };
 
-    useEffect(() => {
-        if (step === 2) getMatrices();
-    }, [step]);
-
-    const getMatrices = async () => {
-        try {
-            console.log(
-                `Sending request to API with criteria ${criteria} and alternatives ${alternatives} `,
-            );
-            const response = await axios.post<string>(
-                apiUrl || "http://localhost:5000" + "/open_ai_api",
-                {
-                    criterias: criteria.join(","),
-                    alternatives: alternatives.join(","),
-                    usecase: usecase,
-                    apikey: apiKey[0].api_key,
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                },
-            );
-
-            console.log(response.data);
-            // const regex = /\{[\s\S]*\}$/;
-            const { criteriaMatrix, alternativeMatrices } = parseAHPData(
-                JSON.stringify(response.data),
-            );
-            setCriteriaMatrix(criteriaMatrix);
-            setAlternativeMatrices(alternativeMatrices);
-            console.log("Matrices recieved from API");
-            nextStep();
-        } catch (error) {
-            console.error("Error handling button press:", error);
-        }
-    };
-
-    //Renderingd
+    //Rendering
     return (
         <>
             <Stepper activeStep={step - 1} alternativeLabel>
@@ -100,6 +56,16 @@ const Form = () => {
                     setCriteria={setCriteria}
                     setAlternatives={setAlternatives}
                     setUsecase={setUsecase}
+                />
+            )}
+            {step == 2 && (
+                <Response
+                    criteria={criteria}
+                    alternatives={alternatives}
+                    usecase={usecase}
+                    setCriteriaMatrix={setCriteriaMatrix}
+                    setAlternativeMatrices={setAlternativeMatrices}
+                    nextStep={nextStep}
                 />
             )}
 
