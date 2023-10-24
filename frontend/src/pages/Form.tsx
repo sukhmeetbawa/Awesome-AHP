@@ -39,7 +39,7 @@ const Form = () => {
         setStep(step + 1);
     };
 
-    //Rendering
+    //Renderingd
     return (
         <>
             <Stepper activeStep={step - 1} alternativeLabel>

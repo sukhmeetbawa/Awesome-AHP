@@ -43,22 +43,35 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
 
     return (
         <>
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
+            <Grid
+                container
+                direction="column"
+                justifyContent="center"
+                alignItems="center"
+            >
+
+                <Grid item textAlign="center" xs={12}>
                     <Typography variant="h2">Alternative Details</Typography>
+                    <br/>
+                </Grid>
+
+                <Grid container item overflow="auto" maxHeight="500px">
+
                     {criteria.map((criterion, k) => (
-                        <Grid key={criterion} container>
-                            <Grid item xs={12}>
+
+                        <Grid key={criterion} container >
+
+                            <Grid item xs={12} textAlign="center">
                                 <Typography variant="h4">
                                     Alternative comparison for Criterion{" "}
                                     {criterion}
                                 </Typography>
                             </Grid>
-                            <Grid item xs={9}>
+                            <Grid item xs={2} />
+                            <Grid item xs={8}>
                                 <Grid container item className="classes.root">
                                     <Box
-                                        overflow="auto"
-                                        maxHeight="360px"
+
                                         width="100%"
                                     >
                                         {alternatives.map((alternative1, i) =>
@@ -88,7 +101,7 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
                                                             }
                                                             defaultPriority={
                                                                 matrix[k][i][
-                                                                    j + i + 1
+                                                                j + i + 1
                                                                 ]
                                                             }
                                                         />
@@ -98,28 +111,46 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
                                     </Box>
                                 </Grid>
                             </Grid>
+                            <Grid item xs={2} />
+                            <Grid item xs={3} />
                             <Grid
                                 container
                                 item
-                                xs={3}
-                                justifyContent="center"
                                 alignItems="center"
-                                key={`table-${criterion}`}
+                                xs={6}
                             >
-                                <Typography variant="h4">
-                                    Alternative Matrix
-                                </Typography>
 
-                                <Table
-                                    data={matrix[k]}
-                                    rowHeaders={alternatives}
-                                    columnHeaders={alternatives}
-                                />
+                                <Grid
+                                    container
+                                    item
+                                    justifyContent="center"
+                                    marginRight="30px"
+                                    marginTop="30px"
+                                    marginBottom="40px"
+                                    key={`table-${criterion}`}
+                                >
+                                    <Typography variant="h4">
+                                        Alternative Matrix
+                                    </Typography>
+
+                                    <Table
+                                        data={matrix[k]}
+                                        rowHeaders={alternatives}
+                                        columnHeaders={alternatives}
+                                    />
+                                </Grid>
+
+
                             </Grid>
+
+
+
+                            <Grid item xs={3} />
                         </Grid>
                     ))}
                 </Grid>
-
+                
+                <br/>
                 <Button
                     variant="contained"
                     onClick={nextStep}
