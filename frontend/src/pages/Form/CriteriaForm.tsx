@@ -1,6 +1,6 @@
 import NextIcon from "@mui/icons-material/NavigateNextRounded";
 import { Box, Button, Grid, Typography } from "@mui/material";
-import { useState, version } from "react";
+import { useState } from "react";
 import PairWiseComparison from "../../components/PairwiseComparison";
 import StyledTable from "../../components/Table";
 import "../../styles/Scrollbar.css";
