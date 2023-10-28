@@ -1,6 +1,7 @@
+import BackIcon from "@mui/icons-material/NavigateBeforeRounded";
 import NextIcon from "@mui/icons-material/NavigateNextRounded";
 import { Box, Button, Grid, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PairWiseComparison from "../../components/PairwiseComparison";
 import Table from "../../components/Table";
 interface AlternativeFormProps {
@@ -9,6 +10,8 @@ interface AlternativeFormProps {
     updateMatrix: (newMatrix: number[][][]) => void;
     recievedMatrix: number[][][];
     nextStep: () => void;
+    prevStep: () => void;
+    error: string;
 }
 const AlternativeForm: React.FC<AlternativeFormProps> = ({
     criteria,
@@ -16,6 +19,8 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
     updateMatrix,
     recievedMatrix,
     nextStep,
+    prevStep,
+    error,
 }) => {
     const [matrix, setMatrix] = useState(() => recievedMatrix);
 
@@ -41,6 +46,14 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
         });
     };
 
+    useEffect(() => {
+        if (error) {
+            alert(`Consistency Check Failed for ${error}`);
+
+            console.error(error);
+        }
+    }, []);
+
     return (
         <>
             <Grid
@@ -49,18 +62,14 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
                 justifyContent="center"
                 alignItems="center"
             >
-
                 <Grid item textAlign="center" xs={12}>
                     <Typography variant="h2">Alternative Details</Typography>
-                    <br/>
+                    <br />
                 </Grid>
 
                 <Grid container item overflow="auto" maxHeight="500px">
-
                     {criteria.map((criterion, k) => (
-
-                        <Grid key={criterion} container >
-
+                        <Grid key={criterion} container>
                             <Grid item xs={12} textAlign="center">
                                 <Typography variant="h4">
                                     Alternative comparison for Criterion{" "}
@@ -70,10 +79,7 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
                             <Grid item xs={2} />
                             <Grid item xs={8}>
                                 <Grid container item className="classes.root">
-                                    <Box
-
-                                        width="100%"
-                                    >
+                                    <Box width="100%">
                                         {alternatives.map((alternative1, i) =>
                                             alternatives
                                                 .slice(i + 1)
@@ -101,7 +107,7 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
                                                             }
                                                             defaultPriority={
                                                                 matrix[k][i][
-                                                                j + i + 1
+                                                                    j + i + 1
                                                                 ]
                                                             }
                                                         />
@@ -113,13 +119,7 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
                             </Grid>
                             <Grid item xs={2} />
                             <Grid item xs={3} />
-                            <Grid
-                                container
-                                item
-                                alignItems="center"
-                                xs={6}
-                            >
-
+                            <Grid container item alignItems="center" xs={6}>
                                 <Grid
                                     container
                                     item
@@ -139,25 +139,33 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
                                         columnHeaders={alternatives}
                                     />
                                 </Grid>
-
-
                             </Grid>
-
-
-
-                            <Grid item xs={3} />
                         </Grid>
                     ))}
                 </Grid>
-                
-                <br/>
-                <Button
-                    variant="contained"
-                    onClick={nextStep}
-                    endIcon={<NextIcon />}
-                >
-                    Calculate
-                </Button>
+
+                <br />
+                <Grid container justifyContent="center" alignItems="center">
+                    <Grid item xs justifyContent="left" container>
+                        <Button
+                            variant="text"
+                            onClick={prevStep}
+                            startIcon={<BackIcon />}
+                        >
+                            Back
+                        </Button>
+                    </Grid>
+                    <Grid item xs justifyContent="center" container>
+                        <Button
+                            variant="contained"
+                            onClick={nextStep}
+                            endIcon={<NextIcon />}
+                        >
+                            Calculate
+                        </Button>
+                    </Grid>
+                    <Grid item xs />
+                </Grid>
             </Grid>
         </>
     );

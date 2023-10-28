@@ -52,16 +52,17 @@ const BasicForm: React.FC<BasicFormProps> = ({
             justifyContent="center"
             alignItems="center"
         >
-            <Grid item xs={12}>
+            <Grid item xs>
                 <Typography variant="h2" style={{ textAlign: "center" }}>
                     Basic Details
                 </Typography>
             </Grid>
-            <Grid container item xs={12}>
+            <Grid container item xs>
                 <Grid item xs />
-                <Grid item xs={4}>
+                <Grid item xs>
                     <Typography variant="h5">Criteria</Typography>
                     <TextField
+                        key="criteria"
                         size="small"
                         label="Enter the Criterias"
                         onChange={handleCriteriaChange}
@@ -70,11 +71,12 @@ const BasicForm: React.FC<BasicFormProps> = ({
                 </Grid>
                 <Grid item xs />
             </Grid>
-            <Grid container item xs={12}>
+            <Grid container item xs>
                 <Grid item xs />
-                <Grid item xs={4}>
+                <Grid item xs>
                     <Typography variant="h5">Alternative</Typography>
                     <TextField
+                        key="alternative"
                         size="small"
                         label="Enter the Alternative"
                         onChange={handleAlternativeChange}
@@ -83,12 +85,13 @@ const BasicForm: React.FC<BasicFormProps> = ({
                 </Grid>
                 <Grid item xs />
             </Grid>
-            <Grid item container xs={12}>
+            <Grid item container xs>
                 <Grid item xs />
 
-                <Grid item xs={4}>
+                <Grid item xs>
                     <Typography variant="h5">Usecase</Typography>
                     <TextField
+                        key="usecase"
                         size="small"
                         label="Enter the Usecase"
                         onChange={handleUsecaseChange}

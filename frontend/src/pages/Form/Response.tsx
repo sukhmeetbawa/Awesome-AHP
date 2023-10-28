@@ -85,9 +85,6 @@ const Response: React.FC<ResponseProps> = ({
 
     useEffect(() => {
         getMatrices();
-    }, []);
-
-    useEffect(() => {
         let currentFactIndex = Math.floor(Math.random() * Facts.length);
         setRandomFact(Facts[currentFactIndex]);
 

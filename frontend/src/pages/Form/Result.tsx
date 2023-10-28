@@ -1,4 +1,12 @@
-import { Box, CircularProgress, Stack } from "@mui/material";
+import BackIcon from "@mui/icons-material/NavigateBeforeRounded";
+import {
+    Box,
+    Button,
+    CircularProgress,
+    Grid,
+    Stack,
+    Typography,
+} from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import BarGraph from "../../components/Graph";
@@ -11,6 +19,10 @@ interface ResultProps {
     apiUrl?: string;
     result: AHPResult;
     setResult: (result: AHPResult) => void;
+    prevStep: () => void;
+    resetStep: () => void;
+    setStep: (step: number) => void;
+    setError: (error: string) => void;
 }
 
 const Result: React.FC<ResultProps> = ({
@@ -21,6 +33,10 @@ const Result: React.FC<ResultProps> = ({
     apiUrl,
     result,
     setResult,
+    prevStep,
+    resetStep,
+    setStep,
+    setError,
 }) => {
     const [loading, setLoading] = useState(true);
 
@@ -38,11 +54,20 @@ const Result: React.FC<ResultProps> = ({
             );
 
             if (response.data.error) {
+                setError(response.data.error);
+                if (response.data.error === "Criterion Table") {
+                    setStep(3);
+                }
+                const errorRegex = /Alternative Table/;
+                if (errorRegex.test(response.data.error)) {
+                    setStep(4);
+                }
                 setResult({
                     error: response.data.error,
                     criterionWeights: [],
                     alternativeWeights: [],
                 });
+                // console.log(response.data.error);
             } else {
                 setResult(response.data);
             }
@@ -69,6 +94,9 @@ const Result: React.FC<ResultProps> = ({
                     <CircularProgress />
                 </Box>
             )}
+            <Grid>
+                <Typography variant="h4">Result</Typography>
+            </Grid>
             {!loading && result && !result.error && (
                 <Stack paddingTop={4} spacing={4} width="50%" margin="auto">
                     <BarGraph
@@ -83,6 +111,23 @@ const Result: React.FC<ResultProps> = ({
                     />
                 </Stack>
             )}
+            <Grid container justifyContent="center" alignItems="center">
+                <Grid item xs justifyContent="left" container>
+                    <Button
+                        variant="text"
+                        onClick={prevStep}
+                        startIcon={<BackIcon />}
+                    >
+                        Back
+                    </Button>
+                </Grid>
+                <Grid item xs justifyContent="center" container>
+                    <Button variant="contained" onClick={resetStep}>
+                        Reset
+                    </Button>
+                </Grid>
+                <Grid item xs />
+            </Grid>
         </>
     );
 };

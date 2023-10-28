@@ -1,6 +1,7 @@
 import NextIcon from "@mui/icons-material/NavigateNextRounded";
 import { Box, Button, Grid, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 import PairWiseComparison from "../../components/PairwiseComparison";
 import StyledTable from "../../components/Table";
 import "../../styles/Scrollbar.css";
@@ -9,12 +10,14 @@ interface CriteriaFormProps {
     criteria: string[];
     updateMatrix: (criteria: number[][]) => void;
     recievedMatrix: number[][];
+    error: string;
 }
 const CriteriaForm: React.FC<CriteriaFormProps> = ({
     nextStep,
     updateMatrix,
     criteria,
     recievedMatrix,
+    error,
 }) => {
     const [matrix, setMatrix] = useState<number[][]>(recievedMatrix);
 
@@ -38,10 +41,16 @@ const CriteriaForm: React.FC<CriteriaFormProps> = ({
         });
     };
 
+    useEffect(() => {
+        if (error) {
+            alert(`Consistency Check Failed for ${error}`);
+            console.error(error);
+        }
+    }, []);
     return (
         <>
-            <Grid 
-                container 
+            <Grid
+                container
                 spacing={3}
                 direction="column"
                 justifyContent="center"
@@ -52,7 +61,6 @@ const CriteriaForm: React.FC<CriteriaFormProps> = ({
                     <Typography variant="h4">Criterion Comparison</Typography>
                 </Grid>
                 <Grid container item overflow="auto" maxHeight="480px">
-
                     <Grid item xs={2} />
 
                     <Grid container item xs={8} className="classes.root">
@@ -76,7 +84,9 @@ const CriteriaForm: React.FC<CriteriaFormProps> = ({
                                                     j,
                                                 )
                                             }
-                                            defaultPriority={matrix[i][j + i + 1]}
+                                            defaultPriority={
+                                                matrix[i][j + i + 1]
+                                            }
                                         />
                                     </Grid>
                                 )),
@@ -87,13 +97,7 @@ const CriteriaForm: React.FC<CriteriaFormProps> = ({
                     <Grid item xs={2} />
 
                     <Grid item xs={3} />
-                    <Grid
-                        container
-                        item
-                        alignItems="center"
-                        xs={6}
-                    >
-
+                    <Grid container item alignItems="center" xs={6}>
                         <Grid
                             container
                             item
@@ -101,21 +105,19 @@ const CriteriaForm: React.FC<CriteriaFormProps> = ({
                             marginRight="30px"
                             marginTop="30px"
                         >
-                            <Typography variant="h4">Criteria Matrix</Typography>
+                            <Typography variant="h4">
+                                Criteria Matrix
+                            </Typography>
                             <StyledTable
                                 data={matrix}
                                 rowHeaders={criteria}
                                 columnHeaders={criteria}
                             />
                         </Grid>
-
                     </Grid>
                     <Grid item xs={3} />
-
-
                 </Grid>
 
-                
                 <Grid item>
                     <Button
                         onClick={nextStep}

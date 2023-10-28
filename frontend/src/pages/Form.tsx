@@ -34,12 +34,32 @@ const Form = () => {
     //Step Counter
     const [step, setStep] = useState(1);
 
+    //Error
+    const [error, setError] = useState<string>("");
+
     //Functions
     const nextStep: () => void = () => {
         setStep(step + 1);
+        setError("");
     };
 
-    //Renderingd
+    const prevStep: () => void = () => {
+        setStep(step - 1);
+        setError("");
+    };
+
+    const resetStep: () => void = () => {
+        setStep(1);
+        setError("");
+        setAlternatives([]);
+        setCriteria([]);
+        setUsecase("");
+        setCriteriaMatrix([]);
+        setAlternativeMatrices([]);
+        setResult(undefined);
+    };
+
+    //Rendering
     return (
         <>
             <Stepper activeStep={step - 1} alternativeLabel>
@@ -75,6 +95,7 @@ const Form = () => {
                     criteria={criteria}
                     updateMatrix={setCriteriaMatrix}
                     recievedMatrix={criteriaMatrix}
+                    error={error}
                 />
             )}
 
@@ -85,6 +106,8 @@ const Form = () => {
                     updateMatrix={setAlternativeMatrices}
                     nextStep={nextStep}
                     recievedMatrix={alternativeMatrices}
+                    prevStep={prevStep}
+                    error={error}
                 />
             )}
 
@@ -102,6 +125,10 @@ const Form = () => {
                         }
                     }
                     setResult={setResult}
+                    prevStep={prevStep}
+                    resetStep={resetStep}
+                    setStep={setStep}
+                    setError={setError}
                 />
             )}
         </>
