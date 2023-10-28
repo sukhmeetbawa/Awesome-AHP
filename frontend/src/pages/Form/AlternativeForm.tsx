@@ -129,8 +129,8 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
                                     marginBottom="40px"
                                     key={`table-${criterion}`}
                                 >
-                                    <Typography variant="h4">
-                                        Alternative Matrix
+                                    <Typography variant="h6" textAlign="center">
+                                        Alternative Matrix for {criterion}
                                     </Typography>
 
                                     <Table
