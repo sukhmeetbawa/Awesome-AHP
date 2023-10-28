@@ -30,10 +30,8 @@ const newApp = () => {
                         <Route path="/" element={<Form />}></Route>
                         <Route path="/about" element={<About />}></Route>
                         <Route path="/credits" element={<Credits />}></Route>
-                        {/* <Route
-                            path="/prefrences"
-                            element={<Preferences />}
-                        ></Route> */}
+                        <Route
+                            path="/preferences"
                     </Routes>
                 </Box>
             </Router>

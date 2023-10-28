@@ -1,8 +1,9 @@
 import { Step, StepLabel, Stepper } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AlternativeForm from "./Form/AlternativeForm";
 import BasicForm from "./Form/BasicForm";
 import CriteriaForm from "./Form/CriteriaForm";
+import Response from "./Form/Response";
 import Result from "./Form/Result";
 
 const Form = () => {
@@ -32,28 +33,32 @@ const Form = () => {
     //Step Counter
     const [step, setStep] = useState(1);
 
-    //API
-    // const apiKey = useCookies(["api_key"]);
-    // const apiUrl = import.meta.env.VITE_API_URL;
+    //Error
+    const [error, setError] = useState<string>("");
 
     //Functions
     const nextStep: () => void = () => {
         setStep(step + 1);
+        setError("");
     };
 
-    useEffect(() => {
-        if (step === 2) {
-            setAlternativeMatrices(() =>
-                Array.from(Array(criteria.length), () =>
-                    Array.from(Array(alternatives.length), () =>
-                        new Array(alternatives.length).fill(1),
-                    ),
-                ),
-            );
-        }
-    }, [step]);
+    const prevStep: () => void = () => {
+        setStep(step - 1);
+        setError("");
+    };
 
-    //Renderingd
+    const resetStep: () => void = () => {
+        setStep(1);
+        setError("");
+        setAlternatives([]);
+        setCriteria([]);
+        setUsecase("");
+        setCriteriaMatrix([]);
+        setAlternativeMatrices([]);
+        setResult(undefined);
+    };
+
+    //Rendering
     return (
         <>
             <Stepper activeStep={step - 1} alternativeLabel>
@@ -66,10 +71,23 @@ const Form = () => {
 
             {step === 1 && (
                 <BasicForm
+                    criteria={criteria}
+                    alternatives={alternatives}
+                    usecase={usecase}
                     nextStep={nextStep}
                     setCriteria={setCriteria}
                     setAlternatives={setAlternatives}
                     setUsecase={setUsecase}
+                />
+            )}
+            {step == 2 && (
+                <Response
+                    criteria={criteria}
+                    alternatives={alternatives}
+                    usecase={usecase}
+                    setCriteriaMatrix={setCriteriaMatrix}
+                    setAlternativeMatrices={setAlternativeMatrices}
+                    nextStep={nextStep}
                 />
             )}
 
@@ -78,9 +96,8 @@ const Form = () => {
                     nextStep={nextStep}
                     criteria={criteria}
                     updateMatrix={setCriteriaMatrix}
-                    recievedMatrix={Array.from(Array(criteria.length), () =>
-                        new Array(criteria.length).fill(1),
-                    )}
+                    recievedMatrix={criteriaMatrix}
+                    error={error}
                 />
             )}
 
@@ -91,6 +108,8 @@ const Form = () => {
                     updateMatrix={setAlternativeMatrices}
                     nextStep={nextStep}
                     recievedMatrix={alternativeMatrices}
+                    prevStep={prevStep}
+                    error={error}
                 />
             )}
 
@@ -114,6 +133,10 @@ const Form = () => {
                         }
                     }
                     setResult={setResult}
+                    prevStep={prevStep}
+                    resetStep={resetStep}
+                    setStep={setStep}
+                    setError={setError}
                 />
             )}
         </>

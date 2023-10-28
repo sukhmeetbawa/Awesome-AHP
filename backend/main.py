@@ -23,7 +23,7 @@ def get_weight(A, str):
     print(w)
     print('CR = %f' % cr)
     if cr >= 0.1:
-        error_message = f"Failed Consistency check of {str}"
+        error_message = f"{str}"
         print(error_message)
         return None, error_message
 
@@ -79,7 +79,7 @@ def generatePrompt(criteria, alternatives, usecase):
     prompt += "consider " + criteria + " as therir criteria \n"
     prompt += "consider " + alternatives + " as their alternatives \n\n"
     prompt += "write down values for priority establishment state based on educated guess \n"
-    prompt += "values lies between value of 1 to 9 dont use decimal values for which priority is higher and use 1/value for which it has less priority \n here 1 is equal and 9 is has the most priority also tell me which value from two has higher priority \n\n"
+    prompt += "values lies between value of 1 to 9 dont use decimal values for which priority is higher and use decimal of 1/value for which it has less priority because json cannot parse \" / \" symbol  \n here 1 is equal and 9 is has the most priority also tell me which value from two has higher priority \n\n"
     prompt += "- pairwise comparision of the criterias (Compare each criterias) \n"
     prompt += "create a criterian table with all " + str(len(criteria_list)) + " criteria comparision with each other \n"
 
@@ -149,7 +149,7 @@ def generatePrompt(criteria, alternatives, usecase):
     prompt += "}\n"
     prompt += "}\n"
     prompt += "\n\n maintain consistancy check for the values under 10 % \n"
-    prompt += "i only want JSON output nothing more. Don't give me any text what so ever"
+    prompt += "i only want JSON output nothing more. Don't give me any text what so ever answer starts from \"{\" and ends with \"}\" "
 
 
     return prompt
@@ -197,7 +197,7 @@ def open_ai_api():
         output = ""
         
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4",
             messages=[
                 {"role": "system", "content": "You are working on an AHP algorithm."},
                 {"role": "user", "content": prompt},
@@ -206,6 +206,7 @@ def open_ai_api():
 
         output += response["choices"][0]["message"]["content"] # type: ignore
 
+        print(output)
         return output
 
 

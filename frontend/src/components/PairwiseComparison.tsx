@@ -51,7 +51,7 @@ const PairWiseComparison: React.FC<Props> = ({
     return (
         <div>
             <div>
-                <Typography variant="h4">
+                <Typography variant="h5">
                     {`${item1} comparison with ${item2}`}
                 </Typography>
                 <Typography variant="body1">

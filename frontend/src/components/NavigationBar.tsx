@@ -1,4 +1,5 @@
 import MenuIcon from "@mui/icons-material/Menu";
+
 import {
     AppBar,
     IconButton,
@@ -16,8 +17,7 @@ const navLinks = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
     { name: "Credits", path: "/credits" },
-    // { name: "Prefrences", path: "/prefrences" },
-];
+    { name: "Preferences", path: "/preferences" },
 
 const NavigationBar: React.FC = () => {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
@@ -97,9 +97,6 @@ const NavigationBar: React.FC = () => {
                         ))}
                     </List>
                 )}
-                {/* <Button color="inherit" component={Link} to="/login">
-                    Login
-                </Button> */}
             </Toolbar>
         </AppBar>
     );
