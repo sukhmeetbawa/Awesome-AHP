@@ -17,7 +17,7 @@ const navLinks = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
     { name: "Credits", path: "/credits" },
-    { name: "Prefrences", path: "/prefrences" },
+    { name: "Preferences", path: "/preferences" },
 ];
 
 const NavigationBar: React.FC = () => {

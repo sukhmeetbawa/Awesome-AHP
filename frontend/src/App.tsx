@@ -32,7 +32,7 @@ const newApp = () => {
                         <Route path="/about" element={<About />}></Route>
                         <Route path="/credits" element={<Credits />}></Route>
                         <Route
-                            path="/prefrences"
+                            path="/preferences"
                             element={<Preferences />}
                         ></Route>
                     </Routes>
