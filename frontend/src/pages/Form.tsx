@@ -72,6 +72,9 @@ const Form = () => {
 
             {step === 1 && (
                 <BasicForm
+                    criteria={criteria}
+                    alternatives={alternatives}
+                    usecase={usecase}
                     nextStep={nextStep}
                     setCriteria={setCriteria}
                     setAlternatives={setAlternatives}

@@ -1,7 +1,7 @@
 import RestoreRoundedIcon from "@mui/icons-material/RestoreRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 
-import { Button, Grid, Stack, TextField, Typography } from "@mui/material";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 
 import React, { useState } from "react";
 import { useCookies } from "react-cookie";
@@ -20,8 +20,7 @@ const Preferences: React.FC = () => {
 
     const handleResetClick = () => {
         removeCookie("api_key");
-        setApiKey("")
-        
+        setApiKey("");
     };
 
     return (
@@ -34,7 +33,7 @@ const Preferences: React.FC = () => {
         >
             <Grid item xs={12}>
                 <Typography variant="h2" style={{ textAlign: "center" }}>
-                Preferences
+                    Preferences
                 </Typography>
             </Grid>
 
@@ -43,13 +42,13 @@ const Preferences: React.FC = () => {
                 <Grid item xs={4}>
                     <Typography variant="h5">API Key</Typography>
                     <TextField
-                size="small"
-                placeholder="Enter your API key"
-                label="API Key"
-                fullWidth
-                value={apiKey}
-                onChange={handleApiKeyChange}
-            />
+                        size="small"
+                        placeholder="Enter your API key"
+                        label="API Key"
+                        fullWidth
+                        value={apiKey}
+                        onChange={handleApiKeyChange}
+                    />
                 </Grid>
                 <Grid item xs />
             </Grid>
@@ -61,7 +60,7 @@ const Preferences: React.FC = () => {
                     color="primary"
                     onClick={handleSaveClick}
                     startIcon={<SaveRoundedIcon />}
-                    style={{ marginRight: '16px' }}
+                    style={{ marginRight: "16px" }}
                 >
                     Save
                 </Button>
@@ -75,40 +74,7 @@ const Preferences: React.FC = () => {
                     Reset
                 </Button>
             </Grid>
-
         </Grid>
-
-
-        // <Stack spacing={2} >
-        //     <Typography variant="h5">Preferences</Typography>
-        //     <Typography variant="h5">API Key</Typography>
-        //     <TextField
-        //         size="small"
-        //         placeholder="Enter your API key"
-        //         label="API Key"
-        //         value={apiKey}
-        //         onChange={handleApiKeyChange}
-        //     />
-
-        //     <div>
-        //         <Button
-        //             variant="contained"
-        //             color="primary"
-        //             onClick={handleSaveClick}
-        //             startIcon={<SaveRoundedIcon />}
-        //         >
-        //             Save
-        //         </Button>
-        //         <Button
-        //             variant="contained"
-        //             color="secondary"
-        //             onClick={handleResetClick}
-        //             startIcon={<RestoreRoundedIcon />}
-        //         >
-        //             Reset
-        //         </Button>
-        //     </div>
-        // </Stack>
     );
 };
 
