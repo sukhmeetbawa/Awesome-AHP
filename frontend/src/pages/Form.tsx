@@ -25,7 +25,7 @@ const Form = () => {
     ];
 
     //Usecase
-    const [_usecase, setUsecase] = useState<string>("");
+    const [usecase, setUsecase] = useState<string>("");
 
     //Result
     const [result, setResult] = useState<AHPResult>();
@@ -91,7 +91,7 @@ const Form = () => {
                 />
             )}
 
-            {step === 2 && (
+            {step === 3 && (
                 <CriteriaForm
                     nextStep={nextStep}
                     criteria={criteria}
@@ -101,7 +101,7 @@ const Form = () => {
                 />
             )}
 
-            {step === 3 && (
+            {step === 4 && (
                 <AlternativeForm
                     criteria={criteria}
                     alternatives={alternatives}
@@ -113,7 +113,7 @@ const Form = () => {
                 />
             )}
 
-            {step === 4 && (
+            {step === 5 && (
                 <Result
                     criteria={criteria}
                     alternatives={alternatives}
