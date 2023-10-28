@@ -5,12 +5,18 @@ interface BasicFormProps {
     setAlternatives: (alternatives: string[]) => void;
     setUsecase: (usecase: string) => void;
     nextStep: () => void;
+    criteria: string[];
+    alternatives: string[];
+    usecase: string;
 }
 const BasicForm: React.FC<BasicFormProps> = ({
     nextStep,
     setAlternatives,
     setCriteria,
     setUsecase,
+    criteria,
+    alternatives,
+    usecase,
 }) => {
     const handleCriteriaChange = (
         event: React.ChangeEvent<HTMLInputElement>,
@@ -42,6 +48,17 @@ const BasicForm: React.FC<BasicFormProps> = ({
         event: React.ChangeEvent<HTMLInputElement>,
     ) => {
         setUsecase(event.target.value);
+    };
+
+    const handleSubmit = () => {
+        if (!criteria.length || !alternatives.length || !usecase) {
+            alert("Please fill all the fields");
+            return;
+        } else if (criteria.length < 3 || alternatives.length < 3) {
+            alert("Please enter atleast 3 criteria and alternatives");
+            return;
+        }
+        nextStep();
     };
 
     return (
@@ -103,7 +120,7 @@ const BasicForm: React.FC<BasicFormProps> = ({
             <Grid item xs>
                 <br />
                 <Button
-                    onClick={nextStep}
+                    onClick={handleSubmit}
                     variant="contained"
                     endIcon={<NextIcon />}
                 >

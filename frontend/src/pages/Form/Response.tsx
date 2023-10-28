@@ -2,6 +2,7 @@ import { Box, CircularProgress, Stack, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 import { parseAHPData } from "../../utils/parseAHPData";
 
 interface ResponseProps {
@@ -21,12 +22,18 @@ const Response: React.FC<ResponseProps> = ({
     setAlternativeMatrices,
     nextStep,
 }) => {
+    const navigate = useNavigate();
     const apiKey = useCookies(["api_key"]);
     const apiUrl = import.meta.env.VITE_API_URL;
 
     const [randomFact, setRandomFact] = useState<string>("");
 
     const getMatrices = async () => {
+        if (!apiKey[0].api_key) {
+            alert("API Key not found");
+            navigate("/preferences");
+        }
+
         try {
             console.log(
                 `Sending request to API with criteria ${criteria} and alternatives ${alternatives} `,
@@ -61,7 +68,9 @@ const Response: React.FC<ResponseProps> = ({
             // setTimeout(() => {
             // }, 10000);
         } catch (error) {
-            console.error("Error handling button press:", error);
+            console.log(error);
+            alert("Invalid API Key");
+            navigate("/preferences");
         }
     };
 
