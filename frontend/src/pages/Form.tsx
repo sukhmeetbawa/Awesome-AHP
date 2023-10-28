@@ -19,14 +19,13 @@ const Form = () => {
 
     const steps = [
         "Basic Details",
-        "Getting Input",
         "Criteria Details",
         "Alternative Details",
         "Result",
     ];
 
     //Usecase
-    const [usecase, setUsecase] = useState<string>("");
+    const [_usecase, setUsecase] = useState<string>("");
 
     //Result
     const [result, setResult] = useState<AHPResult>();
@@ -92,7 +91,7 @@ const Form = () => {
                 />
             )}
 
-            {step === 3 && (
+            {step === 2 && (
                 <CriteriaForm
                     nextStep={nextStep}
                     criteria={criteria}
@@ -102,7 +101,7 @@ const Form = () => {
                 />
             )}
 
-            {step === 4 && (
+            {step === 3 && (
                 <AlternativeForm
                     criteria={criteria}
                     alternatives={alternatives}
@@ -114,12 +113,18 @@ const Form = () => {
                 />
             )}
 
-            {step === 5 && (
+            {step === 4 && (
                 <Result
                     criteria={criteria}
                     alternatives={alternatives}
                     criteriaMatrix={criteriaMatrix}
-                    alternativeMatrices={alternativeMatrices}
+                    alternativeMatrices={Array.from(
+                        Array(criteria.length),
+                        () =>
+                            Array.from(Array(alternatives.length), () =>
+                                new Array(alternatives.length).fill(1),
+                            ),
+                    )}
                     result={
                         result || {
                             error: "",

@@ -18,7 +18,6 @@ const navLinks = [
     { name: "About", path: "/about" },
     { name: "Credits", path: "/credits" },
     { name: "Preferences", path: "/preferences" },
-];
 
 const NavigationBar: React.FC = () => {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 600);

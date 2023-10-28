@@ -5,7 +5,6 @@ import NavigationBar from "./components/NavigationBar";
 import About from "./pages/About";
 import Credits from "./pages/Credits";
 import Form from "./pages/Form";
-import Preferences from "./pages/Prefrences";
 import "./styles/Fonts.css";
 const theme = createTheme({
     shape: { borderRadius: 8 },
@@ -33,8 +32,6 @@ const newApp = () => {
                         <Route path="/credits" element={<Credits />}></Route>
                         <Route
                             path="/preferences"
-                            element={<Preferences />}
-                        ></Route>
                     </Routes>
                 </Box>
             </Router>
