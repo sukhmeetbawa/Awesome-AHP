@@ -16,7 +16,6 @@ interface ResultProps {
     alternativeMatrices: number[][][];
     criteria: string[];
     alternatives: string[];
-    apiUrl?: string;
     result: AHPResult;
     setResult: (result: AHPResult) => void;
     prevStep: () => void;
@@ -30,7 +29,6 @@ const Result: React.FC<ResultProps> = ({
     alternativeMatrices,
     criteria,
     alternatives,
-    apiUrl,
     result,
     setResult,
     prevStep,
@@ -39,7 +37,7 @@ const Result: React.FC<ResultProps> = ({
     setError,
 }) => {
     const [loading, setLoading] = useState(true);
-
+    const apiUrl = import.meta.env.VITE_API_URL;
     const calculateWeights = async () => {
         try {
             const response = await axios.post<AHPResult>(
