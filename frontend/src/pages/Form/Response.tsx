@@ -39,7 +39,7 @@ const Response: React.FC<ResponseProps> = ({
                 `Sending request to API with criteria ${criteria} and alternatives ${alternatives} `,
             );
             const response = await axios.post<string>(
-                apiUrl || "http://localhost:5000" + "/open_ai_api",
+                (apiUrl || "http://localhost:5000") + "/open_ai_api",
                 {
                     criterias: criteria.join(","),
                     alternatives: alternatives.join(","),
