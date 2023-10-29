@@ -1,18 +1,38 @@
-import React, { useState } from "react";
+import {
+    Box,
+    FormControlLabel,
+    Radio,
+    RadioGroup,
+    Slider,
+    Typography,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
 
 interface Props {
     item1: string;
     item2: string;
     onComparison: (value: number, selected: string) => void;
+    defaultPriority: number;
 }
 
 const PairWiseComparison: React.FC<Props> = ({
     item1,
     item2,
     onComparison,
+    defaultPriority,
 }: Props) => {
     const [higher, setHigher] = useState<string>(item1);
     const [lower, setLower] = useState<string>(item2);
+
+    useEffect(() => {
+        // Update default values if defaultPriority is less than 1
+        if (defaultPriority && defaultPriority < 1) {
+            setHigher(item2);
+            setLower(item1);
+            setPriority(1 / defaultPriority);
+            onComparison(1 / defaultPriority, item2);
+        }
+    }, [defaultPriority]);
 
     const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setHigher(event.target.value);
@@ -20,51 +40,50 @@ const PairWiseComparison: React.FC<Props> = ({
         else setLower(item2);
     };
 
-    const [priority, setPriority] = useState<number>(1);
-    const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = parseInt(event.target.value, 10);
-        setPriority(value);
-        onComparison(value, higher);
+    const [priority, setPriority] = useState<number>(defaultPriority || 1);
+    const handleSliderChange = (_: Event, value: number | number[]) => {
+        if (typeof value === "number") {
+            setPriority(value);
+            onComparison(value, higher);
+        }
     };
 
     return (
-        <div style={{ margin: "1rem" }}>
+        <div>
             <div>
-                <h4>{`${item1} comparison with ${item2}`}</h4>
-                <p>Select the higher priority criterion</p>
-                <label>
-                    <input
-                        className="form-check-input"
-                        type="radio"
+                <Typography variant="h5">
+                    {`${item1} comparison with ${item2}`}
+                </Typography>
+                <Typography variant="body1">
+                    Select the higher priority criterion
+                </Typography>
+                <RadioGroup row value={higher} onChange={handleRadioChange}>
+                    <FormControlLabel
                         value={item1}
-                        checked={higher === item1}
-                        onChange={handleRadioChange}
+                        control={<Radio />}
+                        label={item1}
                     />
-                    {item1}
-                </label>
-                <label className="px-4">
-                    <input
-                        className="form-check-input"
-                        type="radio"
+                    <FormControlLabel
                         value={item2}
-                        checked={higher === item2}
-                        onChange={handleRadioChange}
+                        control={<Radio />}
+                        label={item2}
                     />
-                    {item2}
-                </label>
+                </RadioGroup>
             </div>
-            <p>
+            <Typography variant="body1">
                 How much higher is {higher} in comparison with {lower}?
-            </p>
-            <input
-                className="form-range"
-                type="range"
-                min={1}
-                max={9}
-                value={priority}
-                onChange={handleSliderChange}
-            />
-            <span>{priority}</span>
+            </Typography>
+            <Box margin={2}>
+                <Slider
+                    value={priority}
+                    onChange={handleSliderChange}
+                    valueLabelDisplay="auto"
+                    step={1}
+                    marks
+                    min={1}
+                    max={9}
+                />
+            </Box>
         </div>
     );
 };

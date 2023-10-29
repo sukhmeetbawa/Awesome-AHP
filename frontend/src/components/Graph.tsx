@@ -7,16 +7,6 @@ interface BarGraphProps {
     label: string;
 }
 
-const predefinedColors = [
-    "rgb(255, 99, 132)",
-    "rgb(255, 159, 64)",
-    "rgb(255, 205, 86)",
-    "rgb(75, 192, 192)",
-    "rgb(54, 162, 235)",
-    "rgb(153, 102, 255)",
-    "rgb(201, 203, 207)",
-];
-
 const BarGraph: React.FC<BarGraphProps> = ({ data, labels, label }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const chartInstance = useRef<Chart | null>(null);
@@ -31,8 +21,6 @@ const BarGraph: React.FC<BarGraphProps> = ({ data, labels, label }) => {
         if (chartRef.current) {
             const ctx = chartRef.current.getContext("2d");
             if (ctx) {
-                const backgroundColors = predefinedColors.slice(0, data.length);
-
                 chartInstance.current = new Chart(ctx, {
                     type: "bar",
                     data: {
@@ -41,8 +29,6 @@ const BarGraph: React.FC<BarGraphProps> = ({ data, labels, label }) => {
                             {
                                 label: label,
                                 data: data,
-                                backgroundColor: backgroundColors,
-                                borderColor: predefinedColors,
                                 borderWidth: 1,
                                 hoverBorderWidth: 2,
                             },
