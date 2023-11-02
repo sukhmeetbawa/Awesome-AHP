@@ -23,6 +23,23 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
     error,
 }) => {
     const [matrix, setMatrix] = useState(() => recievedMatrix);
+    const [currentPage, setCurrentPage] = useState(0); // Add this line
+
+    const handleNext = () => {
+        if (currentPage < criteria.length - 1) {
+            setCurrentPage(currentPage + 1);
+        } else {
+            nextStep();
+        }
+    };
+
+    const handlePrev = () => {
+        if (currentPage > 0) {
+            setCurrentPage(currentPage - 1);
+        } else {
+            prevStep();
+        }
+    };
 
     const handleComparison = (
         value: number,
@@ -67,89 +84,122 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
                     <br />
                 </Grid>
 
-                <Grid container item overflow="auto" maxHeight="500px">
-                    {criteria.map((criterion, k) => (
-                        <Grid key={criterion} container>
-                            <Grid item xs={12} textAlign="center">
-                                <Typography variant="h4">
-                                    Alternative comparison for Criterion{" "}
-                                    {criterion}
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={2} />
-                            <Grid item xs={8}>
-                                <Grid container item className="classes.root">
-                                    <Box width="100%">
-                                        {alternatives.map((alternative1, i) =>
-                                            alternatives
-                                                .slice(i + 1)
-                                                .map((alternative2, j) => (
-                                                    <Grid
-                                                        item
-                                                        xs={12}
-                                                        key={`${alternative1}-${alternative2}`}
-                                                        width="95%"
-                                                    >
-                                                        <PairWiseComparison
-                                                            item1={alternative1}
-                                                            item2={alternative2}
-                                                            onComparison={(
-                                                                value,
-                                                                selected,
-                                                            ) =>
-                                                                handleComparison(
-                                                                    value,
-                                                                    selected,
-                                                                    k,
-                                                                    i,
-                                                                    j + i + 1,
-                                                                )
-                                                            }
-                                                            defaultPriority={
-                                                                matrix[k][i][
-                                                                    j + i + 1
-                                                                ]
-                                                            }
-                                                        />
-                                                    </Grid>
-                                                )),
-                                        )}
-                                    </Box>
-                                </Grid>
-                            </Grid>
-                            <Grid item xs={2} />
-                            <Grid item xs={3} />
-                            <Grid container item alignItems="center" xs={6}>
-                                <Grid
-                                    container
-                                    item
-                                    justifyContent="center"
-                                    marginRight="30px"
-                                    marginTop="30px"
-                                    marginBottom="40px"
-                                    key={`table-${criterion}`}
-                                >
-                                    <Typography variant="h6" textAlign="center">
-                                        Alternative Matrix for {criterion}
+                {criteria.map((criterion, k) => (
+                    <Grid
+                        container
+                        item
+                        overflow="auto"
+                        maxHeight="500px"
+                        key={k}
+                    >
+                        {k === currentPage && (
+                            <Grid container>
+                                <Grid item xs={12} textAlign="center">
+                                    <Typography variant="h4">
+                                        Alternative comparison for Criterion{" "}
+                                        {criterion}
                                     </Typography>
+                                </Grid>
+                                <Grid item xs={2} />
+                                <Grid item xs={8}>
+                                    <Grid
+                                        container
+                                        item
+                                        className="classes.root"
+                                    >
+                                        <Box width="100%">
+                                            {alternatives.map(
+                                                (alternative1, i) =>
+                                                    alternatives
+                                                        .slice(i + 1)
+                                                        .map(
+                                                            (
+                                                                alternative2,
+                                                                j,
+                                                            ) => (
+                                                                <Grid
+                                                                    item
+                                                                    xs={12}
+                                                                    key={`${alternative1}-${alternative2}`}
+                                                                    width="95%"
+                                                                >
+                                                                    <PairWiseComparison
+                                                                        item1={
+                                                                            alternative1
+                                                                        }
+                                                                        item2={
+                                                                            alternative2
+                                                                        }
+                                                                        onComparison={(
+                                                                            value,
+                                                                            selected,
+                                                                        ) =>
+                                                                            handleComparison(
+                                                                                value,
+                                                                                selected,
+                                                                                k,
+                                                                                i,
+                                                                                j +
+                                                                                    i +
+                                                                                    1,
+                                                                            )
+                                                                        }
+                                                                        defaultPriority={
+                                                                            matrix[
+                                                                                k
+                                                                            ][
+                                                                                i
+                                                                            ][
+                                                                                j +
+                                                                                    i +
+                                                                                    1
+                                                                            ]
+                                                                        }
+                                                                    />
+                                                                </Grid>
+                                                            ),
+                                                        ),
+                                            )}
+                                        </Box>
+                                    </Grid>
+                                </Grid>
+                                <Grid item xs={2} />
+                                <Grid item xs={3} />
+                                <Grid container item alignItems="center" xs={6}>
+                                    <Grid
+                                        container
+                                        item
+                                        justifyContent="center"
+                                        marginRight="30px"
+                                        marginTop="30px"
+                                        marginBottom="40px"
+                                        key={`table-${criterion}`}
+                                    >
+                                        <Typography
+                                            variant="h6"
+                                            textAlign="center"
+                                        >
+                                            Alternative Matrix for {criterion}
+                                        </Typography>
 
-                                    <Table
-                                        data={matrix[k]}
-                                        rowHeaders={alternatives}
-                                        columnHeaders={alternatives}
-                                    />
+                                        <Table
+                                            data={matrix[k]}
+                                            rowHeaders={alternatives}
+                                            columnHeaders={alternatives}
+                                        />
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
-                    ))}
-                </Grid>
+                        )}
+                    </Grid>
+                ))}
 
                 <br />
                 <Grid container justifyContent="center" alignItems="center">
                     <Grid item xs justifyContent="left" container>
                         <Button
                             variant="text"
-                            onClick={prevStep}
+                            onClick={handlePrev}
                             startIcon={<BackIcon />}
                         >
                             Back
@@ -158,10 +208,10 @@ const AlternativeForm: React.FC<AlternativeFormProps> = ({
                     <Grid item xs justifyContent="center" container>
                         <Button
                             variant="contained"
-                            onClick={nextStep}
+                            onClick={handleNext}
                             endIcon={<NextIcon />}
                         >
-                            Calculate
+                            Next
                         </Button>
                     </Grid>
                     <Grid item xs />
