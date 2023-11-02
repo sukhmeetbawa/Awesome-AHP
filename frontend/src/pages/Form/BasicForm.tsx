@@ -1,5 +1,12 @@
 import NextIcon from "@mui/icons-material/NavigateNextRounded";
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import {
+    Button,
+    Checkbox,
+    FormControlLabel,
+    Grid,
+    TextField,
+    Typography,
+} from "@mui/material";
 interface BasicFormProps {
     setCriteria: (criteria: string[]) => void;
     setAlternatives: (alternatives: string[]) => void;
@@ -8,6 +15,8 @@ interface BasicFormProps {
     criteria: string[];
     alternatives: string[];
     usecase: string;
+    consistency: boolean;
+    setConsistency: (consistency: boolean) => void;
 }
 const BasicForm: React.FC<BasicFormProps> = ({
     nextStep,
@@ -17,6 +26,8 @@ const BasicForm: React.FC<BasicFormProps> = ({
     criteria,
     alternatives,
     usecase,
+    consistency,
+    setConsistency,
 }) => {
     const handleCriteriaChange = (
         event: React.ChangeEvent<HTMLInputElement>,
@@ -59,6 +70,12 @@ const BasicForm: React.FC<BasicFormProps> = ({
             return;
         }
         nextStep();
+    };
+
+    const handleConsistencyChange = (
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) => {
+        setConsistency(event.target.checked);
     };
 
     return (
@@ -104,7 +121,6 @@ const BasicForm: React.FC<BasicFormProps> = ({
             </Grid>
             <Grid item container xs>
                 <Grid item xs />
-
                 <Grid item xs>
                     <Typography variant="h5">Usecase</Typography>
                     <TextField
@@ -114,6 +130,22 @@ const BasicForm: React.FC<BasicFormProps> = ({
                         onChange={handleUsecaseChange}
                         fullWidth
                     />
+                </Grid>
+                <Grid item xs />
+            </Grid>
+            <Grid item container xs>
+                <Grid item xs />
+                <Grid item xs>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={consistency}
+                                onChange={handleConsistencyChange}
+                                color="primary"
+                            />
+                        }
+                        label="Use Consistency Check for AHP Calculation"
+                    />{" "}
                 </Grid>
                 <Grid item xs />
             </Grid>

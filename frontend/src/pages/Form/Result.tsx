@@ -23,6 +23,7 @@ interface ResultProps {
     setStep: (step: number) => void;
     setError: (error: string) => void;
     usecase: string;
+    consistency: boolean;
 }
 
 const Result: React.FC<ResultProps> = ({
@@ -37,6 +38,7 @@ const Result: React.FC<ResultProps> = ({
     setStep,
     setError,
     usecase,
+    consistency,
 }) => {
     const [loading, setLoading] = useState(true);
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -50,6 +52,7 @@ const Result: React.FC<ResultProps> = ({
                     alternativeMatrix: alternativeMatrices,
                     criterions: criteria,
                     alternatives: alternatives,
+                    consistency: consistency,
                 },
             );
 
