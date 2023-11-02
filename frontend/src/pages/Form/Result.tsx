@@ -22,6 +22,8 @@ interface ResultProps {
     resetStep: () => void;
     setStep: (step: number) => void;
     setError: (error: string) => void;
+    usecase: string;
+    consistency: boolean;
 }
 
 const Result: React.FC<ResultProps> = ({
@@ -35,6 +37,8 @@ const Result: React.FC<ResultProps> = ({
     resetStep,
     setStep,
     setError,
+    usecase,
+    consistency,
 }) => {
     const [loading, setLoading] = useState(true);
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -48,6 +52,7 @@ const Result: React.FC<ResultProps> = ({
                     alternativeMatrix: alternativeMatrices,
                     criterions: criteria,
                     alternatives: alternatives,
+                    consistency: consistency,
                 },
             );
 
@@ -82,50 +87,119 @@ const Result: React.FC<ResultProps> = ({
 
     return (
         <>
+            <Grid container justifyContent="center" alignItems="center">
+                <Typography variant="h2">Result</Typography>
+            </Grid>
             {loading && (
                 <Box
                     alignItems="center"
                     display="flex"
                     justifyContent="center"
-                    height="75vh"
+                    height="70vh"
                 >
                     <CircularProgress />
                 </Box>
             )}
-            <Grid>
-                <Typography variant="h4">Result</Typography>
-            </Grid>
+
             {!loading && result && !result.error && (
-                <Stack paddingTop={4} spacing={4} width="50%" margin="auto">
-                    <BarGraph
-                        data={result?.alternativeWeights || []}
-                        labels={alternatives}
-                        label="Alternatives"
-                    />
-                    <BarGraph
-                        data={result?.criterionWeights || []}
-                        labels={criteria}
-                        label="Criteria"
-                    />
-                </Stack>
-            )}
-            <Grid container justifyContent="center" alignItems="center">
-                <Grid item xs justifyContent="left" container>
-                    <Button
-                        variant="text"
-                        onClick={prevStep}
-                        startIcon={<BackIcon />}
+                <>
+                    <Box
+                        display="flex"
+                        flexDirection="column"
+                        minHeight="70vh"
+                        alignContent="center"
                     >
-                        Back
-                    </Button>
-                </Grid>
-                <Grid item xs justifyContent="center" container>
-                    <Button variant="contained" onClick={resetStep}>
-                        Reset
-                    </Button>
-                </Grid>
-                <Grid item xs />
-            </Grid>
+                        <Box flexGrow={1}>
+                            <Stack
+                                paddingTop={4}
+                                spacing={4}
+                                width="50%"
+                                margin="auto"
+                            >
+                                <BarGraph
+                                    data={result?.alternativeWeights || []}
+                                    labels={alternatives}
+                                    label="Alternatives"
+                                />
+                                <BarGraph
+                                    data={result?.criterionWeights || []}
+                                    labels={criteria}
+                                    label="Criteria"
+                                />
+                            </Stack>
+                            <Grid
+                                container
+                                justifyContent="center"
+                                alignItems="center"
+                                style={{ minHeight: "10vh" }}
+                            >
+                                <Box
+                                    display="flex"
+                                    width="25%"
+                                    justifyContent="center"
+                                    alignItems="center"
+                                    textAlign="center"
+                                    margin={3}
+                                >
+                                    <Typography variant="body1">
+                                        For the usecase, <b>{usecase}</b> the
+                                        highest priority criteria is{" "}
+                                        <b>
+                                            {
+                                                criteria[
+                                                    result.criterionWeights.indexOf(
+                                                        Math.max(
+                                                            ...result.criterionWeights,
+                                                        ),
+                                                    )
+                                                ]
+                                            }
+                                        </b>{" "}
+                                        and the most preferred alternative is{" "}
+                                        <b>
+                                            {
+                                                alternatives[
+                                                    result.alternativeWeights.indexOf(
+                                                        Math.max(
+                                                            ...result.alternativeWeights,
+                                                        ),
+                                                    )
+                                                ]
+                                            }
+                                        </b>
+                                    </Typography>
+                                </Box>
+                            </Grid>
+                        </Box>
+                        <Box>
+                            <Grid
+                                container
+                                justifyContent="center"
+                                alignItems="center"
+                            >
+                                <Grid item xs justifyContent="left" container>
+                                    <Button
+                                        variant="text"
+                                        onClick={prevStep}
+                                        startIcon={<BackIcon />}
+                                    >
+                                        Back
+                                    </Button>
+                                </Grid>
+                                <Grid item xs justifyContent="center" container>
+                                    <Button
+                                        variant="contained"
+                                        onClick={resetStep}
+                                    >
+                                        Reset
+                                    </Button>
+                                </Grid>
+                                <Grid item xs />
+                            </Grid>
+                        </Box>
+                    </Box>
+                </>
+            )}
         </>
     );
 };

@@ -36,6 +36,9 @@ const Form = () => {
     //Error
     const [error, setError] = useState<string>("");
 
+    //Consistency Check
+    const [consistencyCheck, setConsistencyCheck] = useState(false);
+
     //Functions
     const nextStep: () => void = () => {
         setStep(step + 1);
@@ -78,6 +81,8 @@ const Form = () => {
                     setCriteria={setCriteria}
                     setAlternatives={setAlternatives}
                     setUsecase={setUsecase}
+                    consistency={consistencyCheck}
+                    setConsistency={setConsistencyCheck}
                 />
             )}
             {step == 2 && (
@@ -137,6 +142,8 @@ const Form = () => {
                     resetStep={resetStep}
                     setStep={setStep}
                     setError={setError}
+                    usecase={usecase}
+                    consistency={consistencyCheck}
                 />
             )}
         </>
