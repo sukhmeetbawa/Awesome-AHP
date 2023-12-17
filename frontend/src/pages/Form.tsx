@@ -19,6 +19,7 @@ const Form = () => {
 
     const steps = [
         "Basic Details",
+        "Getting Data",
         "Criteria Details",
         "Alternative Details",
         "Result",
@@ -38,6 +39,9 @@ const Form = () => {
 
     //Consistency Check
     const [consistencyCheck, setConsistencyCheck] = useState(false);
+
+    //ChatGPT
+    const [chatGPT, setChatGPT] = useState(false);
 
     //Functions
     const nextStep: () => void = () => {
@@ -83,6 +87,8 @@ const Form = () => {
                     setUsecase={setUsecase}
                     consistency={consistencyCheck}
                     setConsistency={setConsistencyCheck}
+                    chatgpt={chatGPT}
+                    setChatGPT={setChatGPT}
                 />
             )}
             {step == 2 && (
@@ -93,6 +99,7 @@ const Form = () => {
                     setCriteriaMatrix={setCriteriaMatrix}
                     setAlternativeMatrices={setAlternativeMatrices}
                     nextStep={nextStep}
+                    chatgpt={chatGPT}
                 />
             )}
 

@@ -17,6 +17,8 @@ interface BasicFormProps {
     usecase: string;
     consistency: boolean;
     setConsistency: (consistency: boolean) => void;
+    chatgpt: boolean;
+    setChatGPT: (chatgpt: boolean) => void;
 }
 const BasicForm: React.FC<BasicFormProps> = ({
     nextStep,
@@ -28,6 +30,8 @@ const BasicForm: React.FC<BasicFormProps> = ({
     usecase,
     consistency,
     setConsistency,
+    chatgpt,
+    setChatGPT,
 }) => {
     const handleCriteriaChange = (
         event: React.ChangeEvent<HTMLInputElement>,
@@ -76,6 +80,12 @@ const BasicForm: React.FC<BasicFormProps> = ({
         event: React.ChangeEvent<HTMLInputElement>,
     ) => {
         setConsistency(event.target.checked);
+    };
+
+    const handleChatGPTChange = (
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) => {
+        setChatGPT(event.target.checked);
     };
 
     return (
@@ -145,6 +155,16 @@ const BasicForm: React.FC<BasicFormProps> = ({
                             />
                         }
                         label="Use Consistency Check for AHP Calculation"
+                    />{" "}
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={chatgpt}
+                                onChange={handleChatGPTChange}
+                                color="primary"
+                            />
+                        }
+                        label="Use ChatGPT for generating values"
                     />{" "}
                 </Grid>
                 <Grid item xs />

@@ -12,6 +12,7 @@ interface ResponseProps {
     setCriteriaMatrix: (criteriaMatrix: number[][]) => void;
     setAlternativeMatrices: (alternativeMatrices: number[][][]) => void;
     nextStep: () => void;
+    chatgpt: boolean;
 }
 
 const Response: React.FC<ResponseProps> = ({
@@ -21,6 +22,7 @@ const Response: React.FC<ResponseProps> = ({
     setCriteriaMatrix,
     setAlternativeMatrices,
     nextStep,
+    chatgpt,
 }) => {
     const navigate = useNavigate();
     const apiKey = useCookies(["api_key"]);
@@ -29,6 +31,24 @@ const Response: React.FC<ResponseProps> = ({
     const [randomFact, setRandomFact] = useState<string>("");
 
     const getMatrices = async () => {
+        if (!chatgpt) {
+            // Initialize criteria matrix with 1s
+            const criteriaMatrix = Array(criteria.length).fill(
+                Array(criteria.length).fill(1),
+            );
+            setCriteriaMatrix(criteriaMatrix);
+
+            // Initialize alternative matrices with 1s
+            const alternativeMatrices = Array(criteria.length).fill(
+                Array(alternatives.length).fill(
+                    Array(alternatives.length).fill(1),
+                ),
+            );
+            setAlternativeMatrices(alternativeMatrices);
+
+            nextStep();
+            return;
+        }
         if (!apiKey[0].api_key) {
             alert("API Key not found");
             navigate("/preferences");
@@ -65,8 +85,6 @@ const Response: React.FC<ResponseProps> = ({
             console.log("Matrices recieved from API");
 
             nextStep();
-            // setTimeout(() => {
-            // }, 10000);
         } catch (error) {
             console.log(error);
             alert("Invalid API Key");
